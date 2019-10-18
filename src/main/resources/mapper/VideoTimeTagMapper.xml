@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.VideoTimeTagDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.VideoTimeTag">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="videoId" property="videoId" jdbcType="INTEGER" />
+		<result column="videoName" property="videoName" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, videoId,videoName,time
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 videoId,videoName,time
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="videoId != null ">
+				and videoId = #{videoId,jdbcType=INTEGER}
+			</if>
+			<if test="videoName != null and videoName != '' ">
+				and videoName = #{videoName,jdbcType=VARCHAR}
+			</if>
+			<if test="time != null ">
+				and time = #{time,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime1 != null ">
+				and time &gt;= #{time1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime2 != null ">
+				and time &lt;= #{time2,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		replace INTO t_video_timetag(<include refid="Base_Column_List_NoId"/>) VALUES
+		<foreach collection="list"  separator="," item="item">
+			(#{item.videoId},#{item.videoName},#{item.time})
+		</foreach>
+	</insert>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.VideoTimeTag" useGeneratedKeys="true" keyProperty="id">
+		insert into t_video_timetag (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+		  #{videoId},#{videoName},#{time}
+		)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_video_timetag
+		 where id = #{id}
+	</select>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_video_timetag
+		<include refid="conditions"/>
+		order by time
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		select count(1)
+		from t_video_timetag
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectByVideoId" parameterType="int" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_video_timetag
+		where videoId = #{videoId,jdbcType=INTEGER}
+		order by time
+	</select>
+
+	<select id="selectByVideoName" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_video_timetag
+		where videoName = #{videoName,jdbcType=VARCHAR}
+		order by time
+	</select>
+
+	<update id="updateVideoIdByName" parameterType="map" >
+		update t_video_timetag
+		  set videoId = #{videoId,jdbcType=INTEGER}
+		where videoName = #{videoName,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteById" parameterType="int">
+		delete from t_video_timetag where id = #{id}
+	</delete>
+
+</mapper>

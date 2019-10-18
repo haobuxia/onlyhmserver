@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:redis="http://www.springframework.org/schema/redis"
+       default-lazy-init="true"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/cache
+            http://www.springframework.org/schema/cache/spring-cache.xsd
+             http://www.springframework.org/schema/context
+             http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+            http://www.springframework.org/schema/redis
+            http://www.springframework.org/schema/redis/spring-redis.xsd">
+
+    <cache:annotation-driven/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <tx:annotation-driven/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath*:${profiles.active}/baidu.properties</value>
+                <value>classpath*:${profiles.active}/config.properties</value>
+                <value>classpath*:${profiles.active}/fastdfs-client.properties</value>
+                <value>classpath*:${profiles.active}/helmet-config.properties</value>
+                <value>classpath*:${profiles.active}/jdbc.properties</value>
+                <value>classpath*:${profiles.active}/job.properties</value>
+                <value>classpath*:${profiles.active}/kmx.properties</value>
+                <value>classpath*:${profiles.active}/loadFFmpeg.properties</value>
+                <value>classpath*:${profiles.active}/mqtt.properties</value>
+                <value>classpath*:${profiles.active}/netease.properties</value>
+                <value>classpath*:${profiles.active}/partner-tianyuan.properties</value>
+                <value>classpath*:${profiles.active}/redis.properties</value>
+                <value>classpath*:${profiles.active}/shortmsg.properties</value>
+                <value>classpath*:${profiles.active}/svc-rest.properties</value>
+                <value>classpath*:${profiles.active}/tsinghua.properties</value>
+                <value>classpath*:${profiles.active}/weather.properties</value>
+                <value>classpath*:${profiles.active}/tydatainterface.properties</value>
+                <value>classpath*:${profiles.active}/rabbitmq.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <context:component-scan base-package="com.tianyi.helmet.server" annotation-config="true">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <context:component-scan base-package="com.tianyi.datainterface" annotation-config="true">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="initialSize" value="${initialSize}"></property>
+        <property name="maxActive" value="${maxActive}"></property>
+        <property name="maxIdle" value="${maxIdle}"></property>
+        <property name="minIdle" value="${minIdle}"></property>
+        <property name="maxWait" value="${maxWait}"></property>
+        <property name="validationQuery" value="${validationQuery}"></property>
+    </bean>
+    <bean id="dataInterfaceDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="initialSize" value="${initialSize}"></property>
+        <property name="maxActive" value="${maxActive}"></property>
+        <property name="maxIdle" value="${maxIdle}"></property>
+        <property name="minIdle" value="${minIdle}"></property>
+        <property name="maxWait" value="${maxWait}"></property>
+        <property name="validationQuery" value="${validationQuery}"></property>
+    </bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:/mapper/*.xml"></property>
+        <!--<property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">o
+                        <value>
+                            dialect=mysql
+                            reasonable=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>-->
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.tianyi.helmet.server.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean class="org.springframework.web.client.RestTemplate">
+        <property name="messageConverters">
+            <list>
+                <bean
+                        class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <constructor-arg>
+                        <value>UTF-8</value>
+                    </constructor-arg>
+                </bean>
+                <bean
+                        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="businessService" expression="execution(* com.tianyi.helmet.server.service.*.*(..))"/>
+        <aop:advisor advice-ref="transactionAdvice" pointcut-ref="businessService"/>
+    </aop:config>
+
+    <bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="usePool" value="true"/>
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.password}"/>
+        <property name="timeout" value="${redis.timeout}"/>
+        <property name="database" value="${redis.database}"/>
+    </bean>
+
+    <bean id="redisTemplate" class="com.tianyi.helmet.server.service.redis.JsonRedisTemplate">
+        <constructor-arg ref="redisConnectionFactory"/>
+    </bean>
+
+    <bean id="jsonKeySerializer" class="com.tianyi.helmet.server.service.redis.JsonRedisSerializer"/>
+    <bean id="jedisTemplate" class="com.tianyi.helmet.server.service.redis.JsonRedisTemplate">
+        <constructor-arg ref="redisConnectionFactory"/>
+        <property name="keySerializer" ref="jsonKeySerializer"/>
+        <property name="valueSerializer" ref="jsonKeySerializer"/>
+    </bean>
+
+    <bean id="cacheManager" class="com.tianyi.helmet.server.service.cache.RedisCacheManager">
+        <constructor-arg ref="redisConnectionFactory"/>
+        <property name="defaultTemplate" ref="jedisTemplate"/>
+        <property name="defaultExpiration" value="7200"/><!-- seconds -->
+        <property name="dynamic" value="true"/>
+        <property name="caches">
+            <set>
+                <bean class="com.tianyi.helmet.server.service.cache.RedisCacheInfo">
+                    <constructor-arg value="hmserver"/>
+                    <property name="expiration" value="360000"/><!-- seconds -->
+                </bean>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="jsonRedisSerializer"
+          class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+
+    <redis:listener-container>
+        <redis:listener ref="tsingHuaVideoProcessJob" serializer="jsonRedisSerializer" topic="tsinghuaVideo"/>
+        <redis:listener ref="mergeVideoAudioJob" serializer="jsonRedisSerializer" topic="videoAudioMerge"/>
+        <redis:listener ref="newVideoProcessJob" serializer="jsonRedisSerializer" topic="toProcessVideo"/>
+        <redis:listener ref="videoAsrKeywordProcessJob" serializer="jsonRedisSerializer" topic="toAsrKeywordVideo"/>
+        <redis:listener ref="videoKeywordProcessJob" serializer="jsonRedisSerializer" topic="toAsrVideoKeyword"/>
+        <redis:listener ref="previewVideoProcessJob" serializer="jsonRedisSerializer" topic="toTimePreviewVideo"/>
+        <redis:listener ref="trackVideoProcessJob" serializer="jsonRedisSerializer" topic="toTrackVideo"/>
+        <redis:listener ref="newFileProcessJob" serializer="jsonRedisSerializer" topic="toProcessFile"/>
+        <redis:listener ref="syncVideoGpsDataJob" serializer="jsonRedisSerializer" topic="toSyncGpsData"/>
+
+        <redis:listener ref="neteaseVideoMessageProcesssJob" serializer="jsonRedisSerializer" topic="toDownloadNeteaseVideo"/>
+        <redis:listener ref="bigFileMergeJob" serializer="jsonRedisSerializer" topic="bigFileMerge"/>
+
+        <redis:listener ref="tyUserTokenRefreshJob" serializer="jsonRedisSerializer" topic="toUserTokenRefresh"/>
+        <redis:listener ref="tyUserSvcTaskRefreshJob" serializer="jsonRedisSerializer" topic="toSvcTaskRefresh"/>
+        <redis:listener ref="svcVideoParseJob" serializer="jsonRedisSerializer" topic="toSvcVideoParse"/>
+        <redis:listener ref="svcAudioParseJob" serializer="jsonRedisSerializer" topic="toSvcAudioParse"/>
+        <redis:listener ref="svcImageParseJob" serializer="jsonRedisSerializer" topic="toSvcImageParse"/>
+        <redis:listener ref="neteaseUserCreateJob" serializer="jsonRedisSerializer" topic="toNeUserCreate"/>
+    </redis:listener-container>
+
+
+    <bean id="tyUserTokenRefreshCheckJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="tyUserTokenRefreshCheckJob" />
+        <property name="targetMethod" value="doRefresh" />
+    </bean>
+    <bean id="tyUserTokenRefreshCheckJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="tyUserTokenRefreshCheckJobDetail" />
+        <property name="cronExpression" value="${job.tianyuan.tokenrefresh.express}" />
+    </bean>
+    <bean id="uploadDirClearJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="uploadDirClearJob" />
+        <property name="targetMethod" value="doClear" />
+    </bean>
+    <bean id="uploadDirClearJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="uploadDirClearJobDetail" />
+        <property name="cronExpression" value="${upload.file.dir.clear.express}" />
+    </bean>
+    <bean id="springJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="tyUserTokenRefreshCheckJobDetail" />
+                <ref bean="uploadDirClearJobDetail" />
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="tyUserTokenRefreshCheckJobTrigger"/>
+                <ref bean="uploadDirClearJobTrigger"/>
+            </list>
+        </property>
+        <property name="autoStartup" ref="jobRunFactory"/>
+    </bean>
+    <import resource="classpath:application-mq.xml" />
+</beans>

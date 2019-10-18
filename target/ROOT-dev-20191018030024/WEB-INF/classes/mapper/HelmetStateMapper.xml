@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.HelmetStateDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.HelmetState">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="clientId" property="clientId" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="onlineState" property="onlineState" jdbcType="INTEGER" />
+		<result column="netType" property="netType" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, clientId, createTime,onlineState,netType
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		clientId, createTime,onlineState,netType
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="clientId != null and clientId != ''">
+				and clientId = #{clientId}
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2}
+			</if>
+			<if test="onlineState != null and onlineState >= 0">
+				and onlineState = #{onlineState}
+			</if>
+			<if test="netType != null and netType >= 0">
+				and netType = #{netType}
+			</if>
+		</where>
+	</sql>
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.HelmetGps" useGeneratedKeys="true" keyProperty="id">
+		insert into t_helmetstate (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{clientId},#{createTime},#{onlineState},#{netType}
+		)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_helmetstate
+		 where id = #{id}
+	</select>
+
+	<select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_helmetstate
+		<include refid="conditions"/>
+		order by createTime
+		<if test="order != null and order &gt; 0">
+			asc
+		</if>
+		<if test="order != null and order &lt; 0">
+			desc
+		</if>
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		select count(1)
+		 from  t_helmetstate
+		<include refid="conditions"/>
+	</select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.dictionary.VersionDao">
+
+    <select id="selectVersion" resultType="map">
+        SELECT id,version FROM t_device_version
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addVersion" parameterType="string">
+        INSERT into t_device_version
+        (version)
+        VALUES
+        (#{version})
+    </insert>
+
+    <select id="getVersion" parameterType="string" resultType="java.lang.Integer">
+        SELECT id FROM t_device_version
+        <where>
+            <if test="version != null and version != ''">
+                version = #{version}
+            </if>
+        </where>
+    </select>
+</mapper>

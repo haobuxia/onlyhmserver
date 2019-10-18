@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="hmserver:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>hmserver</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ROOT-${profiles.active}-20191018025324.war">
+      <element id="artifact" artifact-name="hmserver:war exploded" />
+    </root>
+  </artifact>
+</component>

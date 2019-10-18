@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.HelmetBatteryDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.HelmetBattery">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="clientId" property="clientId" jdbcType="VARCHAR" />
+        <result column="neUsername" property="neUsername" jdbcType="VARCHAR" />
+        <result column="battery" property="battery" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,createTime,neUsername,battery,clientId
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        createTime,neUsername,battery,clientId
+    </sql>
+    <sql id="conditions">
+        <where>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.HelmetBattery" useGeneratedKeys="true" keyProperty="id">
+        insert into t_helmetbattery (
+        <include refid="Base_Column_List_NoId" />
+        )
+        values (
+        #{createTime},#{neUsername},#{battery},#{clientId}
+        )
+    </insert>
+    <select id="getLatestBattery" parameterType="map" resultType="int">
+        select battery
+        from  t_helmetbattery
+        where clientId = #{clientId}
+        order by createTime desc limit 1
+    </select>
+</mapper>

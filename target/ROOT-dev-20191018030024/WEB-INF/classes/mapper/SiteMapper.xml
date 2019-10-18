@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.scene.SiteDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.scene.Site">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="lon" property="lon" jdbcType="FLOAT"/>
+        <result column="lat" property="lat" jdbcType="FLOAT"/>
+        <result column="area" property="area" jdbcType="FLOAT"/>
+        <result column="lonLats" property="lonLats" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="district" property="district" jdbcType="VARCHAR"/>
+        <result column="township" property="township" jdbcType="VARCHAR"/>
+        <result column="street" property="street" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,name,lon,lat,area,lonLats,createTime,address,province,city,district,township,street
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 name,lon,lat,area,lonLats,createTime,address,province,city,district,township,street
+	</sql>
+    <sql id="conditions">
+        <where>
+            <if test="id != null ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="name != null and name != '' ">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="province != null and province != '' ">
+                and province = #{province,jdbcType=VARCHAR}
+            </if>
+            <if test="city != null and city != '' ">
+                and city = #{city,jdbcType=VARCHAR}
+            </if>
+            <if test="district != null and district != '' ">
+                and district = #{district,jdbcType=VARCHAR}
+            </if>
+            <if test="township != null and township != '' ">
+                and township = #{township,jdbcType=VARCHAR}
+            </if>
+            <if test="street != null and street != '' ">
+                and street = #{city,jdbcType=VARCHAR}
+            </if>
+            <if test="lon != null">
+                and lon = #{lon,jdbcType=FLOAT}
+            </if>
+            <if test="lat != null ">
+                and lat = #{lat,jdbcType=FLOAT}
+            </if>
+            <if test="idList != null and idList.size > 0  ">
+                and id IN
+                <foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>
+            </if>
+            <if test="keyword != null and keyword != '' ">
+                and (
+                name like concat('%',#{keyword},'%')
+                or address like concat('%',#{keyword},'%')
+                )
+            </if>
+            <if test="createTime != null ">
+                and createTime = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime1 != null ">
+                and createTime &gt;= #{createTime1,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime2 != null ">
+                and createTime &lt;= #{createTime2,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.scene.Site" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_site (
+         <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+         #{name},#{lon},#{lat},#{area},#{lonLats},#{createTime},#{address},#{province},#{city},#{district},#{township},#{street}
+        )
+    </insert>
+
+    <select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_site
+        <include refid="conditions"/>
+        order by createTime
+        <if test="order != null and order &gt; 0">
+            asc
+        </if>
+        <if test="order != null and order &lt; 0">
+            desc
+        </if>
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        select count(1)
+        from t_site
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_site
+        where id = #{id}
+    </select>
+
+    <update id="updateById" parameterType="com.tianyi.helmet.server.entity.scene.Site">
+        update t_site
+          SET
+          name = #{name},
+          lon = #{lon},
+          lat = #{lat},
+          area = #{area},
+          lonLats = #{lonLats},
+          address = #{address},
+          province = #{province},
+          city = #{city},
+          district = #{district},
+          township = #{township},
+          street = #{street}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        delete from t_site where id = #{id}
+    </delete>
+</mapper>

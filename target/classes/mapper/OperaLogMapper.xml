@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.log.OperaLogDao">
+	<!-- wenxinyan 2018-8-16 修改了listBy的SQL语句配置，根据头盔号模糊查询，根据id倒序排序 -->
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.log.OperaLog">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="clientId" property="clientId" jdbcType="VARCHAR" />
+		<result column="logContent" property="logContent" jdbcType="VARCHAR" />
+		<result column="UUID" property="UUID" jdbcType="VARCHAR" />
+		<result column="deviceType" property="deviceType" jdbcType="VARCHAR" />
+		<result column="logType" property="logType" jdbcType="VARCHAR" />
+		<result column="logflowId" property="logflowId" jdbcType="VARCHAR" />
+		<result column="orderNo" property="orderNo" jdbcType="INTEGER" />
+		<result column="logDate" property="logDate" jdbcType="DATE" />
+		<result column="logTime" property="logTime" jdbcType="TIMESTAMP" />
+		<result column="logNature" property="logNature" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, createTime,clientId,logContent,UUID,deviceType,logType,logflowId,orderNo,logDate,logTime,logNature
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 createTime,clientId,logContent,UUID,deviceType,logType,logflowId,orderNo,logDate,logTime,logNature
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="clientId != null and clientId != ''">
+				and clientId like concat('%',#{clientId},'%')
+			</if>
+			<if test="UUID != null and UUID != ''">
+				and UUID = #{UUID}
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="logContentlike != null and logContentlike != '' ">
+				and logContent like concat('%',#{logContentlike},'%')
+			</if>
+			<if test="deviceType != null and deviceType != ''">
+				and deviceType = #{deviceType}
+			</if>
+			<if test="logType != null and logType != ''">
+				and logType = #{logType}
+			</if>
+			<if test="logNature != null">
+				and logNature = #{logNature}
+			</if>
+			<if test="crossTime1 != null">
+				and logTime &gt;= #{crossTime1}
+			</if>
+			<if test="crossTime2 != null">
+				and logTime &lt;= #{crossTime2}
+			</if>
+			<if test="logflowId != null and logflowId != ''">
+				and logflowId = #{logflowId}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.log.OperaLog" useGeneratedKeys="true" keyProperty="id">
+		insert into t_opera_log (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{createTime},#{clientId},#{logContent},#{UUID},#{deviceType},#{logType},#{logflowId},#{orderNo},#{logDate},#{logTime},#{logNature}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select t2.id,createTime,clientId,logContent,UUID,deviceType,logType,t2.logflowId,orderNo,logDate,logTime,logNature from
+		(SELECT min(id) id,logflowId FROM t_opera_log <include refid="conditions"/> GROUP BY logflowId ORDER BY id DESC) t1
+	  	left join (SELECT <include refid="Base_Column_List" /> FROM t_opera_log <include refid="conditions"/> ORDER BY id DESC) t2
+		on t1.logflowId=t2.logflowId
+		order by t1.id DESC,t2.id DESC
+		<include refid="core.page"/>
+	</select>
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_opera_log
+		<include refid="conditions"/>
+	</select>
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_opera_log
+		 where id = #{id}
+	</select>
+
+</mapper>

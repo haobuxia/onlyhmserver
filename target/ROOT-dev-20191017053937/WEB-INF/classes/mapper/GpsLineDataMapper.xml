@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.GpsLineDataDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.GpsLineData">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="fileId" property="fileId" jdbcType="INTEGER" />
+		<result column="lineNo" property="lineNo" jdbcType="INTEGER" />
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="byteLength" property="byteLength" jdbcType="INTEGER" />
+		<result column="baseTime" property="baseTime" jdbcType="TIMESTAMP" />
+		<result column="realBaseTime" property="realBaseTime" jdbcType="TIMESTAMP" />
+		<result column="dataCount" property="dataCount" jdbcType="INTEGER" />
+		<result column="dataIds" property="dataIds" jdbcType="VARCHAR" />
+		<result column="dataParts" property="dataParts" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, fileId,lineNo,imei,byteLength,baseTime,realBaseTime,dataCount,dataIds,dataParts
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 fileId,lineNo,imei,byteLength,baseTime,realBaseTime,dataCount,dataIds,dataParts
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="imei != null and imei != ''">
+				and imei = #{imei,jdbcType=VARCHAR}
+			</if>
+			<if test="fileId != null and fileId > 0 ">
+				and fileId = #{fileId,jdbcType=INTEGER}
+			</if>
+			<if test="lineNo != null and lineNo > 0 ">
+				and lineNo = #{lineNo,jdbcType=INTEGER}
+			</if>
+			<if test="baseTime != null ">
+				and baseTime = #{baseTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="baseTime1 != null ">
+				and baseTime &gt;= #{baseTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="baseTime2 != null ">
+				and baseTime &lt;= #{baseTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="realBaseTime != null ">
+				and realBaseTime = #{realBaseTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="realBaseTime1 != null ">
+				and realBaseTime &gt;= #{realBaseTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="realBaseTime2 != null ">
+				and realBaseTime &lt;= #{realBaseTime2,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.GpsData" useGeneratedKeys="true" keyProperty="id">
+		insert into t_gpsline (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{fileId},#{lineNo},#{imei},#{byteLength},#{baseTime},#{realBaseTime},#{dataCount},#{dataIds},#{dataParts}
+		)
+	</insert>
+
+	<select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_gpsline
+		<include refid="conditions"/>
+		order by baseTime
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		select count(1)
+		from t_gpsline
+		<include refid="conditions"/>
+	</select>
+
+	<select id="getImeiList" resultType="string">
+		  select distinct imei
+		   from t_gpsline
+	</select>
+</mapper>

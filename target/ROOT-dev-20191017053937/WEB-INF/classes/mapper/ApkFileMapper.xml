@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.app.ApkFileDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.app.ApkFile">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uploadTime" property="uploadTime" jdbcType="TIMESTAMP" />
+		<result column="fileName" property="fileName" jdbcType="VARCHAR" />
+		<result column="fileType" property="fileType" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="ossPath" property="ossPath" jdbcType="VARCHAR" />
+		<result column="uploadUserId" property="uploadUserId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, uploadTime,fileName,fileType,version,description,ossPath,uploadUserId
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 uploadTime,fileName,fileType,version,description,ossPath,uploadUserId
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="fileName != null and fileName != ''">
+				and fileName = #{fileName}
+			</if>
+			<if test="fileType != null and fileType != ''">
+				and fileType = #{fileType}
+			</if>
+			<if test="version != null and version != ''">
+				and version = #{version}
+			</if>
+			<if test="ossPath != null and ossPath != ''">
+				and ossPath = #{ossPath}
+			</if>
+			<if test="uploadUserId != null ">
+				and uploadUserId = #{uploadUserId}
+			</if>
+			<if test="uploadTime != null ">
+				and uploadTime = #{uploadTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="uploadTime1 != null ">
+				and uploadTime &gt;= #{uploadTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="uploadTime2 != null ">
+				and uploadTime &lt;= #{uploadTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				and (  fileName like concat('%',#{keyword},'%')  or description like concat('%',#{keyword},'%') )
+			</if>
+			<if test="fileNamelike != null and fileNamelike != '' ">
+				and fileName like concat('%',#{fileNamelike},'%')
+			</if>
+			<if test="descriptionlike != null and descriptionlike != '' ">
+				and description like concat('%',#{descriptionlike},'%')
+			</if>
+			<if test="idList != null and idList.size > 0  ">
+				and id IN
+				<foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.app.ApkFile" useGeneratedKeys="true" keyProperty="id">
+		insert into t_apk_file (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{uploadTime},#{fileName},#{fileType},#{version},#{description},#{ossPath},#{uploadUserId}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_apk_file
+		<include refid="conditions"/>
+		order by uploadTime desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_apk_file
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_apk_file
+		 where id = #{id}
+	</select>
+
+	<update id="updateById" parameterType="com.tianyi.helmet.server.entity.app.ApkFile">
+		update t_apk_file
+		  set uploadTime = #{uploadTime},
+			  fileName = #{fileName},
+			  fileType = #{fileType},
+			  version = #{version},
+			  description = #{description},
+			  ossPath = #{ossPath},
+			  uploadUserId = #{uploadUserId}
+		where id = #{id}
+	</update>
+
+	<delete id="deleteById" parameterType="int">
+		delete from t_apk_file where id = #{id}
+	</delete>
+
+	<select id="getAppLastForceVersion" resultMap="BaseResultMap">
+        SELECT id,version,ossPath,fileName,description
+        FROM t_apk_file
+        <where>
+         AND fileType='phone' AND description like '%必要%'
+         ORDER BY version DESC
+         LIMIT 1
+        </where>
+    </select>
+	<select id="getAppLastOptionalVersion" resultMap="BaseResultMap">
+		SELECT id,version,ossPath,fileName,description
+		FROM t_apk_file
+		<where>
+			AND fileType='phone' AND description not like '%必要%'
+			ORDER BY version DESC
+			LIMIT 1
+		</where>
+	</select>
+</mapper>

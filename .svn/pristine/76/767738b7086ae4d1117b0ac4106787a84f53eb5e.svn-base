@@ -1,0 +1,5 @@
+redis.host=127.0.0.1
+redis.port=6379
+redis.timeout=5000
+redis.password=tianyikeji2017
+redis.database=1

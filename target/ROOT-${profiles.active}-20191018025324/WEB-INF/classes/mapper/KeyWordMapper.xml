@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.KeyWordDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.KeyWord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="keywordName" property="keywordName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id, keywordName, participle
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 keywordName, participle
+	</sql>
+    <sql id="conditions">
+        <where>
+            <if test="keywordName != null and keywordName != ''">
+                and keywordName = #{keywordName}
+            </if>
+            <if test="keywordNameNotStart != null and keywordNameNotStart != ''">
+                and keywordName not like concat(#{keywordNameNotStart},'%')
+            </if>
+            <if test="keyword != null and keyword != '' ">
+                and keywordName like concat('%',#{keyword},'%')
+            </if>
+            <if test="idList != null and idList.size > 0  ">
+                and id IN
+                <foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.KeyWord" useGeneratedKeys="true"
+            keyProperty="id">
+        insert ignore into t_keyword (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+          #{keywordName}, #{participle}
+        )
+    </insert>
+    <select id="listBy" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_keyword
+        <include refid="conditions"/>
+        order by keywordName
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        select count(id)
+        from t_keyword
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_keyword
+        where id = #{id}
+    </select>
+
+    <select id="selectByKeywordName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_keyword
+        where keywordName = #{keywordName}
+        limit 0,1
+    </select>
+
+    <update id="updateNameById" parameterType="map">
+		update t_keyword
+		set keywordName = #{keywordName}
+		where id = #{id}
+	</update>
+
+    <delete id="deleteById" parameterType="int">
+		delete from t_keyword where id = #{id}
+	</delete>
+
+</mapper>

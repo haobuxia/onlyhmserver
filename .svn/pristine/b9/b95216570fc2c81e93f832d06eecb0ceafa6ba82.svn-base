@@ -1,0 +1,8 @@
+job.enablefile=C:/Users/tianxujin
+job.enableip=
+
+job.tianyuan.tokenrefresh.start=1
+job.tianyuan.tokenrefresh.express=0 0 8 * * ? *
+# refresh token when left life less than 10 days
+job.tianyuan.tokenrefresh.minutes=14400
+job.tianyuan.svctaskrefresh.minutes=3

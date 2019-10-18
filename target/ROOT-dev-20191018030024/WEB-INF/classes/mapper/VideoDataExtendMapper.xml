@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.VideoDataExtendDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.VideoDataExtend">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="videoId" property="videoId" jdbcType="INTEGER"/>
+        <result column="audioOssPath" property="audioOssPath" jdbcType="TIMESTAMP"/>
+        <result column="audioOrigText" property="audioOrigText" jdbcType="VARCHAR"/>
+        <result column="audioEditText" property="audioEditText" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,videoId,audioOssPath,audioOrigText,audioEditText
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 videoId,audioOssPath,audioOrigText,audioEditText
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id != null and id > 0 ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="videoId != null and videoId > 0 ">
+                and videoId = #{videoId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.VideoDataExtend" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_video_dataext (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+         #{videoId},#{audioOssPath},#{audioOrigText},#{audioEditText}
+        )
+    </insert>
+
+    <select id="selectByVideoId" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_video_dataext
+        where videoId = #{videoId}
+    </select>
+
+    <update id="updateOrigTextByVideoId" parameterType="map">
+        update t_video_dataext
+        set audioOrigText =#{audioOrigText}
+        where videoId = #{videoId}
+    </update>
+
+    <update id="updateEditTextByVideoId" parameterType="map">
+		update t_video_dataext
+		set audioEditText =#{audioEditText}
+		where videoId = #{videoId}
+	</update>
+
+    <delete id="deleteByVideoId" parameterType="int">
+		  delete from t_video_dataext where videoId = #{videoId}
+	</delete>
+</mapper>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianyi.helmet.server.dao.workorder.WorkJobDao">
+  <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.workorder.WorkJob">
+    <id column="job_pk" jdbcType="INTEGER" property="jobPk" />
+    <result column="plt_oid" jdbcType="VARCHAR" property="pltOid" />
+    <result column="plt_tyworkoid" jdbcType="VARCHAR" property="pltTyWorkOid" />
+    <result column="plt_jobname" jdbcType="VARCHAR" property="pltJobName" />
+    <result column="plt_iscustomerjob" jdbcType="BOOLEAN" property="pltIsCustomerJob" />
+    <result column="plt_jobstatus" jdbcType="VARCHAR" property="pltJobStatus" />
+    <result column="plt_jobstarttime" jdbcType="INTEGER" property="pltJobStartTime" />
+    <result column="plt_jobfinishtime" jdbcType="INTEGER" property="pltJobFinishTime" />
+    <result column="plt_jobvideos" jdbcType="VARCHAR" property="pltJobVideos" />
+    <result column="plt_jobdetails" jdbcType="VARCHAR" property="pltJobDetails" />
+    <result column="plt_sequence" jdbcType="INTEGER" property="pltSequence" />
+    <result column="plt_tyexpertworkoid" jdbcType="VARCHAR" property="pltTyExpertWorkOid" />
+    <result column="plt_jobsummary" jdbcType="VARCHAR" property="pltJobSummary" />
+    <result column="plt_tyexpertjoboid" jdbcType="VARCHAR" property="pltTyExpertJobOid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    job_pk, plt_oid, plt_tyworkoid, plt_jobname, plt_iscustomerjob, plt_jobstatus, plt_jobstarttime, 
+    plt_jobfinishtime, plt_jobvideos, plt_jobdetails, plt_sequence, plt_tyexpertworkoid, 
+    plt_jobsummary, plt_tyexpertjoboid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_workjob
+    where job_pk = #{jobPk,jdbcType=INTEGER}
+  </select>
+  <!-- 通过工单工作卡id获取作业卡-->
+  <select id="selectByWorkOid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_workjob
+    where plt_tyworkoid = #{workCardId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_workjob
+    where job_pk = #{jobPk,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tianyi.helmet.server.entity.workorder.WorkJob">
+    insert into t_workjob (job_pk, plt_oid, plt_tyworkoid, 
+      plt_jobname, plt_iscustomerjob, plt_jobstatus, 
+      plt_jobstarttime, plt_jobfinishtime, plt_jobvideos, 
+      plt_jobdetails, plt_sequence, plt_tyexpertworkoid, 
+      plt_jobsummary, plt_tyexpertjoboid
+      )
+    values (#{jobPk,jdbcType=INTEGER}, #{pltOid,jdbcType=VARCHAR}, #{pltTyWorkOid,jdbcType=VARCHAR},
+      #{pltJobName,jdbcType=VARCHAR}, #{pltIsCustomerJob,jdbcType=BOOLEAN}, #{pltJobStatus,jdbcType=VARCHAR},
+      #{pltJobStartTime,jdbcType=INTEGER}, #{pltJobFinishTime,jdbcType=INTEGER}, #{pltJobVideos,jdbcType=VARCHAR},
+      #{pltJobDetails,jdbcType=VARCHAR}, #{pltSequence,jdbcType=INTEGER}, #{pltTyExpertWorkOid,jdbcType=VARCHAR},
+      #{pltJobSummary,jdbcType=VARCHAR}, #{pltTyExpertJobOid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tianyi.helmet.server.entity.workorder.WorkJob">
+    insert into t_workjob
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobPk != null">
+        job_pk,
+      </if>
+      <if test="pltOid != null">
+        plt_oid,
+      </if>
+      <if test="pltTyWorkOid != null">
+        plt_tyworkoid,
+      </if>
+      <if test="pltJobName != null">
+        plt_jobname,
+      </if>
+      <if test="pltIsCustomerJob != null">
+        plt_iscustomerjob,
+      </if>
+      <if test="pltJobStatus != null">
+        plt_jobstatus,
+      </if>
+      <if test="pltJobStartTime != null">
+        plt_jobstarttime,
+      </if>
+      <if test="pltJobFinishTime != null">
+        plt_jobfinishtime,
+      </if>
+      <if test="pltJobVideos != null">
+        plt_jobvideos,
+      </if>
+      <if test="pltJobDetails != null">
+        plt_jobdetails,
+      </if>
+      <if test="pltSequence != null">
+        plt_sequence,
+      </if>
+      <if test="pltTyExpertWorkOid != null">
+        plt_tyexpertworkoid,
+      </if>
+      <if test="pltJobSummary != null">
+        plt_jobsummary,
+      </if>
+      <if test="pltTyExpertJobOid != null">
+        plt_tyexpertjoboid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jobPk != null">
+        #{jobPk,jdbcType=INTEGER},
+      </if>
+      <if test="pltOid != null">
+        #{pltOid,jdbcType=VARCHAR},
+      </if>
+      <if test="pltTyWorkOid != null">
+        #{pltTyWorkOid,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobName != null">
+        #{pltJobName,jdbcType=VARCHAR},
+      </if>
+      <if test="pltIsCustomerJob != null">
+        #{pltIsCustomerJob,jdbcType=BOOLEAN},
+      </if>
+      <if test="pltJobStatus != null">
+        #{pltJobStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobStartTime != null">
+        #{pltJobStartTime,jdbcType=INTEGER},
+      </if>
+      <if test="pltJobFinishTime != null">
+        #{pltJobFinishTime,jdbcType=INTEGER},
+      </if>
+      <if test="pltJobVideos != null">
+        #{pltJobVideos,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobDetails != null">
+        #{pltJobDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="pltSequence != null">
+        #{pltSequence,jdbcType=INTEGER},
+      </if>
+      <if test="pltTyExpertWorkOid != null">
+        #{pltTyExpertWorkOid,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobSummary != null">
+        #{pltJobSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="pltTyExpertJobOid != null">
+        #{pltTyExpertJobOid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tianyi.helmet.server.entity.workorder.WorkJob">
+    update t_workjob
+    <set>
+      <if test="pltOid != null">
+        plt_oid = #{pltOid,jdbcType=VARCHAR},
+      </if>
+      <if test="pltTyWorkOid != null">
+        plt_tyworkoid = #{pltTyWorkOid,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobName != null">
+        plt_jobname = #{pltJobName,jdbcType=VARCHAR},
+      </if>
+      <if test="pltIsCustomerJob != null">
+        plt_iscustomerjob = #{pltIsCustomerJob,jdbcType=BOOLEAN},
+      </if>
+      <if test="pltJobStatus != null">
+        plt_jobstatus = #{pltJobStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobStartTime != null">
+        plt_jobstarttime = #{pltJobStartTime,jdbcType=INTEGER},
+      </if>
+      <if test="pltJobFinishTime != null">
+        plt_jobfinishtime = #{pltJobFinishTime,jdbcType=INTEGER},
+      </if>
+      <if test="pltJobVideos != null">
+        plt_jobvideos = #{pltJobVideos,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobDetails != null">
+        plt_jobdetails = #{pltJobDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="pltSequence != null">
+        plt_sequence = #{pltSequence,jdbcType=INTEGER},
+      </if>
+      <if test="pltTyExpertWorkOid != null">
+        plt_tyexpertworkoid = #{pltTyExpertWorkOid,jdbcType=VARCHAR},
+      </if>
+      <if test="pltJobSummary != null">
+        plt_jobsummary = #{pltJobSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="pltTyExpertJobOid != null">
+        plt_tyexpertjoboid = #{pltTyExpertJobOid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where job_pk = #{jobPk,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tianyi.helmet.server.entity.workorder.WorkJob">
+    update t_workjob
+    set plt_oid = #{pltOid,jdbcType=VARCHAR},
+      plt_tyworkoid = #{pltTyWorkOid,jdbcType=VARCHAR},
+      plt_jobname = #{pltJobName,jdbcType=VARCHAR},
+      plt_iscustomerjob = #{pltIsCustomerJob,jdbcType=BOOLEAN},
+      plt_jobstatus = #{pltJobStatus,jdbcType=VARCHAR},
+      plt_jobstarttime = #{pltJobStartTime,jdbcType=INTEGER},
+      plt_jobfinishtime = #{pltJobFinishTime,jdbcType=INTEGER},
+      plt_jobvideos = #{pltJobVideos,jdbcType=VARCHAR},
+      plt_jobdetails = #{pltJobDetails,jdbcType=VARCHAR},
+      plt_sequence = #{pltSequence,jdbcType=INTEGER},
+      plt_tyexpertworkoid = #{pltTyExpertWorkOid,jdbcType=VARCHAR},
+      plt_jobsummary = #{pltJobSummary,jdbcType=VARCHAR},
+      plt_tyexpertjoboid = #{pltTyExpertJobOid,jdbcType=VARCHAR}
+    where job_pk = #{jobPk,jdbcType=INTEGER}
+  </update>
+</mapper>

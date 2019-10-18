@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.TianYuanUserDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.TianYuanUser">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="regTime" property="regTime" jdbcType="TIMESTAMP"/>
+        <result column="refreshTime" property="refreshTime" jdbcType="TIMESTAMP"/>
+        <result column="loginType" property="loginType" jdbcType="VARCHAR"/>
+        <result column="accessToken" property="accessToken" jdbcType="VARCHAR"/>
+        <result column="refreshToken" property="refreshToken" jdbcType="VARCHAR"/>
+        <result column="tokenType" property="tokenType" jdbcType="VARCHAR"/>
+        <result column="expiresIn" property="expiresIn" jdbcType="BIGINT"/>
+        <result column="oprtId" property="oprtId" jdbcType="VARCHAR"/>
+        <result column="oprtName" property="oprtName" jdbcType="VARCHAR"/>
+        <result column="accountId" property="accountId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id, username,password,regTime,refreshTime,loginType,accessToken,refreshToken,tokenType,expiresIn,oprtId,oprtName,accountId
+	</sql>
+
+    <sql id="Base_Column_List_NoId">
+		 username,password,regTime,refreshTime,loginType,accessToken,refreshToken,tokenType,expiresIn,oprtId,oprtName,accountId
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="accountId != null and accountId != ''">
+                and accountId = #{accountId,jdbcType=VARCHAR}
+            </if>
+            <if test="oprtId != null and oprtId != ''">
+                and oprtId = #{oprtId,jdbcType=VARCHAR}
+            </if>
+            <if test="oprtName != null and oprtName != ''">
+                and oprtName = #{oprtName,jdbcType=VARCHAR}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                and (username like concat('%',#{keyword},'%') or oprtName like concat('%',#{keyword},'%'))
+            </if>
+            <if test="accessToken != null and accessToken != '' ">
+                and accessToken = #{accessToken,jdbcType=VARCHAR}
+            </if>
+            <if test="refreshToken != null and refreshToken != '' ">
+                and refreshToken = #{refreshToken,jdbcType=VARCHAR}
+            </if>
+            <if test="tokenType != null and tokenType != '' ">
+                and tokenType = #{tokenType,jdbcType=VARCHAR}
+            </if>
+            <if test="regTime != null ">
+                and regTime = #{regTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="regTime1 != null ">
+                and regTime &gt;= #{regTime1,jdbcType=TIMESTAMP}
+            </if>
+            <if test="regTime2 != null ">
+                and regTime &lt;= #{regTime2,jdbcType=TIMESTAMP}
+            </if>
+            <if test="refreshTime != null ">
+                and refreshTime = #{refreshTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="refreshTime1 != null ">
+                and refreshTime &gt;= #{refreshTime1,jdbcType=TIMESTAMP}
+            </if>
+            <if test="refreshTime2 != null ">
+                and refreshTime &lt;= #{refreshTime2,jdbcType=TIMESTAMP}
+            </if>
+            <if test="idList != null and idList.size > 0  ">
+                and id IN
+                <foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>
+            </if>
+            <if test="oprtIdList != null and oprtIdList.size > 0  ">
+                and oprtId IN
+                <foreach collection="oprtIdList" item="oprtId" open="(" separator="," close=")">#{oprtId}</foreach>
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.TianYuanUser" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_tianyuan_user (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{username},#{password},#{regTime},#{refreshTime},#{loginType},#{accessToken},#{refreshToken},#{tokenType},#{expiresIn},#{oprtId},#{oprtName},#{accountId}
+        )
+    </insert>
+
+    <select id="listBy" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyuan_user
+        <include refid="conditions"/>
+        order by regTime desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        select count(id)
+        from t_tianyuan_user
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyuan_user
+        where id = #{id}
+    </select>
+
+    <select id="selectByUsername" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyuan_user
+        where username = #{username}
+    </select>
+
+    <select id="selectByOprtId" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyuan_user
+        where oprtId = #{oprtId}
+    </select>
+
+    <select id="selectByOprtName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyuan_user
+        where oprtName = #{oprtName}
+    </select>
+
+    <delete id="deleteById" parameterType="int">
+		  delete from t_tianyuan_user where id = #{id}
+	</delete>
+
+    <update id="updateById" parameterType="com.tianyi.helmet.server.entity.client.TianYuanUser">
+        update t_tianyuan_user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="accountId != null and accountId != ''">
+                accountId = #{accountId,jdbcType=VARCHAR},
+            </if>
+            <if test="oprtId != null and oprtId != ''">
+                oprtId = #{oprtId,jdbcType=VARCHAR},
+            </if>
+            <if test="oprtName != null and oprtName != ''">
+                oprtName = #{oprtName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="regTime != null ">
+                regTime = #{regTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refreshTime != null ">
+                refreshTime = #{refreshTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="loginType != null and loginType != '' ">
+                loginType = #{loginType,jdbcType=VARCHAR},
+            </if>
+            <if test="accessToken != null and accessToken != '' ">
+                accessToken = #{accessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="refreshToken != null and refreshToken != '' ">
+                refreshToken = #{refreshToken,jdbcType=VARCHAR},
+            </if>
+            <if test="tokenType != null and tokenType != '' ">
+                tokenType = #{tokenType,jdbcType=VARCHAR},
+            </if>
+            <if test="expiresIn != null ">
+                expiresIn = #{expiresIn,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

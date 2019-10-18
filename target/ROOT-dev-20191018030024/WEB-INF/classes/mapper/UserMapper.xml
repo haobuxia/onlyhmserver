@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.UserDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.User">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="account" property="account" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="birthday" property="birthday" jdbcType="DATE" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="organisation" property="organisation" jdbcType="INTEGER" />
+        <result column="department" property="department" jdbcType="VARCHAR" />
+        <result column="roleCodes" property="roleCodes" jdbcType="VARCHAR" />
+        <result column="neUserWeb" property="neUserWeb" jdbcType="VARCHAR" />
+        <result column="neUserHel" property="neUserHel" jdbcType="VARCHAR" />
+        <result column="neUserPhn" property="neUserPhn" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,createTime,account,password,name,sex,birthday,mobile,organisation,department,roleCodes,neUserWeb,
+        neUserHel,neUserPhn,status,tianyuanAccount,tianyuanId
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        createTime,account,password,name,sex,birthday,mobile,organisation,department,roleCodes,neUserWeb,neUserHel,
+        neUserPhn,status,tianyuanAccount,tianyuanId
+    </sql>
+    <sql id="conditions">
+        <where>
+            <if test="1==1">
+                and status = 1
+            </if>
+            <if test="account != null and account != ''">
+                and account = #{account,jdbcType=VARCHAR}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null and name != ''">
+                and name like binary concat('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="namecheck != null and namecheck != ''">
+                and name = #{namecheck,jdbcType=VARCHAR}
+            </if>
+            <if test="sex != null ">
+                and sex = #{sex,jdbcType=INTEGER}
+            </if>
+            <if test="birthday != null ">
+                and birthday = #{birthday,jdbcType=DATE}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="organisation != null and organisation != ''">
+                and organisation = #{organisation,jdbcType=INTEGER}
+            </if>
+            <if test="department != null and department != ''">
+                and department = #{department,jdbcType=VARCHAR}
+            </if>
+            <if test="roleCodes != null and roleCodes != ''">
+                and roleCodes like binary concat('%',#{roleCodes,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="neUserWeb != null and neUserWeb != ''">
+                and neUserWeb = #{neUserWeb,jdbcType=VARCHAR}
+            </if>
+            <if test="neUserHel != null and neUserHel != ''">
+                and neUserHel = #{neUserHel,jdbcType=VARCHAR}
+            </if>
+            <if test="neUserPhn != null and neUserPhn != ''">
+                and neUserPhn = #{neUserPhn,jdbcType=VARCHAR}
+            </if>
+            <if test="crossTime1 != null ">
+                and createTime &gt;= #{crossTime1,jdbcType=TIMESTAMP}
+            </if>
+            <if test="crossTime2 != null ">
+                and createTime &lt;= #{crossTime2,jdbcType=TIMESTAMP}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="tianyuanAccount!=null">
+                and tianyuanAccount=#{tianyuanAccount, jdbcType=INTEGER}
+            </if>
+            <if test="tianyuanId!=null">
+                and tianyuanId=#{tianyuanId, jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user (
+          <include refid="Base_Column_List_NoId" />
+        )
+        VALUES (
+          #{createTime},#{account},#{password},#{name},#{sex},#{birthday},#{mobile},#{organisation},#{department},
+        #{roleCodes},#{neUserWeb},#{neUserHel},#{neUserPhn},1,#{tianyuanAccount},#{tianyuanId}
+        )
+    </insert>
+
+    <update id="deleteById" parameterType="int">
+        UPDATE t_user
+        SET status = 0
+        WHERE id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.client.User">
+        UPDATE t_user SET
+          password = #{password,jdbcType=VARCHAR},
+          name = #{name,jdbcType=VARCHAR},
+          sex = #{sex,jdbcType=INTEGER},
+          birthday = #{birthday,jdbcType=DATE},
+          mobile = #{mobile,jdbcType=VARCHAR},
+          department = #{department,jdbcType=VARCHAR},
+          roleCodes = #{roleCodes,jdbcType=VARCHAR}
+        <if test="neUserWeb != null and neUserWeb != ''">
+            ,neUserWeb = #{neUserWeb,jdbcType=VARCHAR}
+        </if>
+        <if test="neUserHel != null and neUserHel != ''">
+            ,neUserHel = #{neUserHel,jdbcType=VARCHAR}
+        </if>
+        <if test="neUserPhn != null and neUserPhn != ''">
+            ,neUserPhn = #{neUserPhn,jdbcType=VARCHAR}
+        </if>
+        <if test="organisation != null and organisation != ''">
+            ,organisation = #{organisation,jdbcType=INTEGER}
+        </if>
+        <if test="tianyuanAccount != null and tianyuanAccount != ''">
+            ,tianyuanAccount  = #{tianyuanAccount,jdbcType=VARCHAR}
+        </if>
+        WHERE id = #{id}
+    </update>
+
+    <select id="listBy" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_user
+        <include refid="conditions" />
+        ORDER BY id DESC
+        <include refid="core.page" />
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        SELECT COUNT(id)
+        FROM t_user
+        <include refid="conditions" />
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_user
+        WHERE id = #{id}
+    </select>
+
+    <select id="listByNoPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_user
+        <include refid="conditions" />
+    </select>
+
+    <select id="listDept" parameterType="map" resultType="string">
+        SELECT
+        DISTINCT department
+        FROM t_user
+        <include refid="conditions" />
+    </select>
+
+    <select id="selectByAccount" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_user
+        WHERE account = #{account} and status = 1
+    </select>
+
+    <select id="selectByTianyuanAccount" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_user
+        WHERE tianyuanaccount = #{account} and status = 1
+    </select>
+
+    <select id="selectByNoNetUser" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_user
+        WHERE neUserWeb is null and neUserHel is null and neUserPhn is null and status = 1
+    </select>
+
+    <select id="selectByCompany" parameterType="map" resultMap="BaseResultMap">
+        SELECT DISTINCT
+        u.id,u.createTime,u.account,u.password,u.name,u.sex,u.birthday,u.mobile,u.organisation,u.department,u.roleCodes,u.neUserWeb,u.
+        neUserHel,u.neUserPhn,u.status,u.tianyuanAccount,u.tianyuanId
+        from t_helmetuniversal h
+        join t_role r on r.universalid=h.id
+        and h.avprovider='netease'
+        join t_user u on r.id in (u.roleCodes) and u.tianyuanaccount != ''
+    </select>
+
+    <select id="selectUsersByUid" parameterType="int" resultMap="BaseResultMap">
+        select
+        DISTINCT u.id,u.createTime,u.account,u.password,u.name,u.sex,u.birthday,u.mobile,u.organisation,u.department,u.roleCodes,u.neUserWeb,u.
+        neUserHel,u.neUserPhn,u.status,u.tianyuanAccount,u.tianyuanId
+        from t_helmetuniversalcontact t
+        join t_user u on t.userId = u.id
+        where t.id= #{uid}
+    </select>
+</mapper>

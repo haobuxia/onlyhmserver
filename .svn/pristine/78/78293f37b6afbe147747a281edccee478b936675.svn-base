@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.scene.WorkOrderDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.scene.svc.WorkOrder">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="userRealName" property="userRealName" jdbcType="VARCHAR"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="subject" property="subject" jdbcType="VARCHAR"/>
+        <result column="orderType" property="orderType" jdbcType="VARCHAR"/>
+        <result column="customerName" property="customerName" jdbcType="VARCHAR"/>
+        <result column="contactName" property="contactName" jdbcType="VARCHAR"/>
+        <result column="contactPhone" property="contactPhone" jdbcType="VARCHAR"/>
+        <result column="latLng" property="latLng" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="brand" property="brand" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="machineCode" property="machineCode" jdbcType="VARCHAR"/>
+        <result column="orderState" property="orderState" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="tags" property="tags" jdbcType="VARCHAR"/>
+        <result column="collaborateCnt" property="collaborateCnt" jdbcType="INTEGER"/>
+        <result column="orderCnt" property="orderCnt" jdbcType="INTEGER"/>
+        <result column="planTime" property="planTime" jdbcType="TIMESTAMP"/>
+        <result column="inputTime" property="inputTime" jdbcType="TIMESTAMP"/>
+        <result column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,userId,userRealName,orderNo,subject,orderType,customerName,contactName,contactPhone,latLng,address,brand,model,machineCode,orderState,remark,tags,collaborateCnt,orderCnt,planTime,inputTime,startTime,endTime
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		userId,userRealName,orderNo,subject,orderType,customerName,contactName,contactPhone,latLng,address,brand,model,machineCode,orderState,remark,tags,collaborateCnt,orderCnt,planTime,inputTime,startTime,endTime
+	</sql>
+    <sql id="conditions">
+        <where>
+            <if test="userId != null ">
+                and userId = #{userId}
+            </if>
+            <if test="userRealName != null and userRealName != '' ">
+                and userRealName = #{userRealName}
+            </if>
+            <if test="orderNo != null and orderNo != '' ">
+                and orderNo = #{orderNo}
+            </if>
+            <if test="orderType != null and orderType != '' ">
+                and orderType = #{orderType}
+            </if>
+            <if test="brand != null and brand != '' ">
+                and brand = #{brand}
+            </if>
+            <if test="model != null and model != '' ">
+                and model = #{model}
+            </if>
+            <if test="machineCode != null and machineCode != '' ">
+                and machineCode = #{machineCode}
+            </if>
+            <if test="keyword != null and keyword != '' ">
+                and (
+                    userRealName like concat('%',#{keyword},'%') OR
+                    subject like concat('%',#{keyword},'%') OR
+                    customerName like concat('%',#{keyword},'%') OR
+                    contactName like concat('%',#{keyword},'%') OR
+                    contactPhone like concat('%',#{keyword},'%') OR
+                    address like concat('%',#{keyword},'%') OR
+                    brand like concat('%',#{keyword},'%') OR
+                    model like concat('%',#{keyword},'%') OR
+                    machineCode like concat('%',#{keyword},'%') OR
+                    remark like concat('%',#{keyword},'%') OR
+                    tags like concat('%',#{keyword},'%')
+                )
+            </if>
+            <if test="orderState != null and orderState != '' ">
+                and orderState = #{orderState}
+            </if>
+            <if test="orderStateNot != null and orderStateNot != '' ">
+                and orderState != #{orderStateNot}
+            </if>
+
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.scene.svc.WorkOrder" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_workorder (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{userId},#{userRealName},#{orderNo},#{subject},#{orderType},#{customerName},#{contactName},#{contactPhone},#{latLng},#{address},#{brand},#{model},#{machineCode},#{orderState},#{remark},#{tags},#{collaborateCnt},#{orderCnt},#{planTime},#{inputTime},#{startTime},#{endTime}
+        )
+    </insert>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workorder
+        where id = #{id}
+    </select>
+
+    <select id="selectByOrderNo" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workorder
+        where orderNo = #{orderNo}
+    </select>
+
+    <select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workorder
+        <include refid="conditions"/>
+        order by id
+        <if test="order != null and order &gt; 0">
+            asc
+        </if>
+        <if test="order != null and order &lt; 0">
+            desc
+        </if>
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        select count(1)
+        from t_workorder
+        <include refid="conditions"/>
+    </select>
+
+    <update id="updateOrderStateToIngByOrderNo" parameterType="string">
+		update t_workorder
+		 set orderState = 'ING',startTime = now()
+		where orderNo = #{orderNo}
+		  and orderState = 'INIT'
+	</update>
+
+    <update id="updateOrderStateToEndByOrderNo" parameterType="string">
+		update t_workorder
+		set orderState = 'END',endTime = now()
+		where orderNo = #{orderNo}
+		  and orderState = 'ING'
+	</update>
+
+    <update id="updateById" parameterType="com.tianyi.helmet.server.entity.scene.svc.WorkOrder">
+		update t_workorder
+		set
+			subject = #{subject},
+			customerName=#{customerName},
+			contactName=#{contactName},
+			contactPhone=#{contactPhone},
+			latLng=#{latLng},
+			address=#{address},
+			brand=#{brand},
+			model=#{model},
+			machineCode=#{machineCode},
+			remark=#{remark},
+			tags=#{tags},
+			planTime=#{planTime},
+			inputTime=#{inputTime}
+		where id = #{id}
+	</update>
+
+    <update id="increaseCollaborateCntByOrderNo" parameterType="string">
+		update t_workorder
+		  set collaborateCnt = collaborateCnt + 1
+		where orderNo = #{orderNo}
+		  and orderState = 'ING'
+	</update>
+
+    <update id="increaseOrderCntByOrderNo" parameterType="string">
+		update t_workorder
+		set collaborateCnt = collaborateCnt + 1
+		where orderNo = #{orderNo}
+		  and orderState = 'ING'
+	</update>
+
+    <delete id="deleteByOrderNo" parameterType="string">
+		delete from t_workorder where orderNo = #{orderNo}
+	</delete>
+
+    <insert id="insertRel" parameterType="map">
+        INSERT into t_wordorder_part_rel
+        (
+        createTime
+        <if test="orderNo!=null and orderNo!=''">
+            ,orderNo
+        </if>
+        <if test="codeMsg!=null and codeMsg!=''">
+            ,codeMsg
+        </if>
+        <if test="codeType!=null and codeType!=''">
+            ,codeType
+        </if>
+        <if test="partName!=null and partName!=''">
+            ,partName
+        </if>
+        <if test="partPrice!=null and partPrice!=''">
+            ,partPrice
+        </if>
+        <if test="partNo!=null and partNo!=''">
+            ,partNo
+        </if>
+        <if test="warehouseName!=null and warehouseName!=''">
+            ,warehouseName
+        </if>
+        )
+        VALUE
+        (
+        NOW()
+        <if test="orderNo!=null and orderNo!=''">
+            ,#{orderNo}
+        </if>
+        <if test="codeMsg!=null and codeMsg!=''">
+            ,#{codeMsg}
+        </if>
+        <if test="codeType!=null and codeType!=''">
+            ,#{codeType}
+        </if>
+        <if test="partName!=null and partName!=''">
+            ,#{partName}
+        </if>
+        <if test="partNo!=null and partNo!=''">
+            ,#{partNo}
+        </if>
+        <if test="warehouseName!=null and warehouseName!=''">
+            ,#{warehouseName}
+        </if>
+        <if test="partPrice!=null and partPrice!=''">
+            ,#{partPrice}
+        </if>
+        )
+    </insert>
+
+    <select id="findPartByOrderNo" parameterType="string" resultType="map">
+        select
+        orderNo,partNo,partName,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s') createTime,codeType,warehouseName
+        from t_wordorder_part_rel
+        WHERE
+        orderNo = #{orderNo}
+        limit 1
+
+    </select>
+
+    <!-- 好像用不到 -->
+    <!--<select id="findPartInfoByOrderNo" parameterType="string" resultType="map">
+        select
+        orderNo,partNo,partName,partPrice,sysOneName,sysTwoName,codeMsg,codeType,image,warehouseName
+        from t_wordorder_part_rel
+        WHERE
+        orderNo = #{orderNo}
+    </select>-->
+
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.svc.SvcAudioDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.svc.SvcAudio">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uploadTime" property="uploadTime" jdbcType="TIMESTAMP" />
+		<result column="clientId" property="clientId" jdbcType="VARCHAR" />
+		<result column="oprtId" property="oprtId" jdbcType="VARCHAR" />
+		<result column="userName" property="userName" jdbcType="VARCHAR" />
+		<result column="ossPath" property="ossPath" jdbcType="VARCHAR" />
+		<result column="audioType" property="audioType" jdbcType="VARCHAR" />
+		<result column="machineCode" property="machineCode" jdbcType="VARCHAR" />
+		<result column="rwh" property="rwh" jdbcType="VARCHAR" />
+		<result column="svcId" property="svcId" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, uploadTime, clientId, oprtId, userName, ossPath, audioType, machineCode, rwh,svcId
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 uploadTime, clientId, oprtId, userName, ossPath, audioType, machineCode, rwh,svcId
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="clientId != null and clientId != '' ">
+				and clientId = #{clientId,jdbcType=VARCHAR}
+			</if>
+			<if test="clientid != null and clientid != '' ">
+				and clientId = #{clientid,jdbcType=VARCHAR}
+			</if>
+			<if test="oprtId != null and oprtId != '' ">
+				and oprtId = #{oprtId,jdbcType=VARCHAR}
+			</if>
+			<if test="audioType != null and audioType != '' ">
+				and audioType = #{audioType,jdbcType=VARCHAR}
+			</if>
+			<if test="machineCode != null and machineCode != '' ">
+				and machineCode = #{machineCode,jdbcType=VARCHAR}
+			</if>
+			<if test="rwh != null and rwh != '' ">
+				and rwh = #{rwh,jdbcType=VARCHAR}
+			</if>
+			<if test="svcId != null and svcId != '' ">
+				and svcId = #{svcId,jdbcType=VARCHAR}
+			</if>
+			<if test="uploadTime != null ">
+				and uploadTime = #{uploadTime}
+			</if>
+			<if test="uploadTime1 != null ">
+				and uploadTime &gt;= #{uploadTime1}
+			</if>
+			<if test="uploadTime2 != null ">
+				and uploadTime &lt;= #{uploadTime2}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.svc.SvcAudio" useGeneratedKeys="true" keyProperty="id">
+		insert into t_svc_audio (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{uploadTime},#{clientId},#{oprtId},#{userName},#{ossPath},#{audioType},#{machineCode},#{rwh},#{svcId}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_svc_audio
+		<include refid="conditions"/>
+		order by uploadTime desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_svc_audio
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_svc_audio
+		 where id = #{id}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		  delete from t_svc_audio where id = #{id}
+	</delete>
+</mapper>

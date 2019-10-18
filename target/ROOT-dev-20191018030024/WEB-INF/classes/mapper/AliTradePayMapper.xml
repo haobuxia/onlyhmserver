@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.pay.AliTradePayDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.pay.AliTradePay">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="outTradeNo" property="outTradeNo" jdbcType="VARCHAR" />
+		<result column="helmetImei" property="helmetImei" jdbcType="VARCHAR" />
+		<result column="tyOprtId" property="tyOprtId" jdbcType="VARCHAR" />
+		<result column="tyTradeType" property="tyTradeType" jdbcType="VARCHAR" />
+		<result column="tyTradeNo" property="tyTradeNo" jdbcType="VARCHAR" />
+		<result column="tradeNo" property="tradeNo" jdbcType="VARCHAR" />
+		<result column="buyerLogonId" property="buyerLogonId" jdbcType="VARCHAR" />
+		<result column="buyerUserId" property="buyerUserId" jdbcType="VARCHAR" />
+		<result column="totalAmount" property="totalAmount" jdbcType="FLOAT" />
+		<result column="receiptAmount" property="receiptAmount" jdbcType="FLOAT" />
+		<result column="buyerPayAmount" property="buyerPayAmount" jdbcType="FLOAT" />
+		<result column="invoiceAmount" property="invoiceAmount" jdbcType="FLOAT" />
+		<result column="gmtPayment" property="gmtPayment" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="subject" property="subject" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, outTradeNo,helmetImei,tyOprtId,tyTradeType,tyTradeNo,tradeNo,buyerLogonId,buyerUserId,totalAmount,receiptAmount,buyerPayAmount,invoiceAmount,gmtPayment,status,subject
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 outTradeNo,helmetImei,tyOprtId,tyTradeType,tyTradeNo,tradeNo,buyerLogonId,buyerUserId,totalAmount,receiptAmount,buyerPayAmount,invoiceAmount,gmtPayment,status,subject
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="outTradeNo != null and outTradeNo != ''">
+				and outTradeNo = #{outTradeNo}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="helmetImei != null and helmetImei != ''">
+				and helmetImei = #{helmetImei}
+			</if>
+			<if test="tyOprtId != null and tyOprtId != ''">
+				and tyOprtId = #{tyOprtId}
+			</if>
+			<if test="tyTradeNo != null and tyTradeNo != ''">
+				and tyTradeNo = #{tyTradeNo}
+			</if>
+			<if test="tradeNo != null and tradeNo != ''">
+				and tradeNo = #{tradeNo}
+			</if>
+			<if test="gmtPayment != null ">
+				and gmtPayment = #{gmtPayment,jdbcType=TIMESTAMP}
+			</if>
+			<if test="gmtPayment1 != null ">
+				and gmtPayment &gt;= #{gmtPayment1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="gmtPayment2 != null ">
+				and gmtPayment &lt;= #{gmtPayment2,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.pay.AliTradePay" useGeneratedKeys="true" keyProperty="id">
+		insert into t_ali_tradepay (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{outTradeNo},#{helmetImei},#{tyOprtId},#{tyTradeType},#{tyTradeNo},#{tradeNo},#{buyerLogonId},#{buyerUserId},#{totalAmount},#{receiptAmount},#{buyerPayAmount},#{invoiceAmount},#{gmtPayment},#{status},#{subject}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_ali_tradepay
+		<include refid="conditions"/>
+		order by gmtPayment desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_ali_tradepay
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_ali_tradepay
+		 where id = #{id}
+	</select>
+
+	<select id="selectByOutTradeNo" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_ali_tradepay
+		where outTradeNo = #{outTradeNo}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		delete from t_ali_tradepay where id = #{id}
+	</delete>
+
+</mapper>

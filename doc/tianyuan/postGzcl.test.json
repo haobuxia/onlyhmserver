@@ -1,0 +1,133 @@
+{
+
+  "AccountID": "1000002269",
+  "code": "0",
+  "Version": "1",
+  "TokenSign": "eyJhbGciOiJSUzI1NiIsImtpZCI6IkE0MDc1MDAwRUNFMTVDRDZBMjY3N0M0QUJDNUMxNTMwRDYzRDRCREYiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJwQWRRQU96aFhOYWlaM3hLdkZ3Vk1OWTlTOTgifQ.eyJuYmYiOjE1MjI0MDYwMjgsImV4cCI6MTUyNDk5ODAyOCwiaXNzIjoiaHR0cDovL3Rlc3Q0LnR5Z3BzLmNvbS90eW1pY3Mvb2F1dGgiLCJhdWQiOlsiaHR0cDovL3Rlc3Q0LnR5Z3BzLmNvbS90eW1pY3Mvb2F1dGgvcmVzb3VyY2VzIiwiYXBpIl0sImNsaWVudF9pZCI6InJlbnRhbHdlYiIsInN1YiI6IjEwMDAwMDIwMjgiLCJhdXRoX3RpbWUiOjE1MjI0MDYwMjgsImlkcCI6ImxvY2FsIiwiYWNudF9pZCI6IjEwMDAwMDIwMjgiLCJncm91cF9pZCI6IiIsInN5c2lkIjoiMCIsIm9wcnRfbmFtZSI6IumrmOaXreWPrCIsInNjb3BlIjpbIm9wZW5pZCIsInByb2ZpbGUiLCJhcGkiLCJvZmZsaW5lX2FjY2VzcyJdLCJhbXIiOlsicGFzc3dvcmQiXX0.P0DwzvaNlVf4YS3NBUDPHIklzECpSnrh8twkrT4cYM-WgrN8_Z3ChL4hdVRgR_phBFVW51bq13Ge0DCZ1iCULdaxAsLfHAvCqawIKw2wSIPQBHiWbiDHoIkm0zqT9Z9nlKIwzYnxL6aj9VFyXxU-LQBD-DEYtYgI7qbxjw2n-izRSWmgiObY9bEL6gozxmcKGYgvmPb1wIStqHoIjOgrsgYW67D3tqd8gL8-0r94wmutvFgsazj22fg8_jDsSQbaljmSRPlbRBvkEOI_KGaB-qint3TskEaZPbDLg9fDWtWePIMpGUdu1Tws_pAlhWEujmJMgOZzzgAvObiJM6-ODQ",
+  "SvcCommSbjbxx": [
+    {
+      "SvcCSB_jqszc":"??",
+      "SvcCSB_txbz": "??",
+      "SvcCSB_fwrq":"??",
+      "svccsb_sfazpsq": "否",
+      "svccsb_sendtime": "2018-04-05T19:15:27.000",
+      "svccsb_rwh": "RW20180410007",
+      "svccsb_svc_id": "9",
+      "svccsb_jqszshi": "邯郸市",
+      "svccsb_jqszx": "涉县",
+      "svccsb_jqszsheng": "河北",
+      "svccsb_gzxs": "889"
+    }
+  ],
+  "SvcCommJgnr": [
+    {
+      "svccj_rwh": "RW20180410007",
+      "svccj_sendtime": "2018-04-04T19:15:27.000",
+      "svccj_svc_id": "9",
+      "SvcCJ_jgnr":"??",
+      "SvcCJ_wwcyy":"??",
+      "SvcCJ_txbz":"??"
+    }
+  ],
+  "SvcCommYhxx": [
+    {
+      "svccy_sendtime": "2018-04-04T19:15:27.000",
+      "svccy_lxr": "黄兴学",
+      "svccy_lxfs": "15831062488",
+      "svccy_rwh": "RW20180410007",
+      "svccy_yhmc": "安徽个体",
+      "svccy_svc_id": "9",
+      "SvcCY_txbz": "??"
+    }
+  ],
+  "comment": "田一头盔填报",
+  "SvcCommSjlc": [
+    {
+      "svccsj_jsfwsj": "09:19",
+      "svccsj_fhsj": "15:40",
+      "svccsj_svc_id": "9",
+      "svccsj_cfsj": "11:30",
+      "svccsj_sendtime": "2018-04-08T11:15:27.000",
+      "svccsj_rwh": "RW20180410007",
+      "svccsj_lc": "45",
+      "SvcCSJ_tld": "？？？",
+      "SvcCSJ_txbz": "？？？",
+      "svccsj_ksfwsj": "13:51"
+    }
+  ],
+  "SvcGzclMain": [
+    {
+
+      "SvcGM_gzcl_txbz": "1",//@todo
+      "SvcGM_gzjc_txbz": "1",//@todo
+
+      "SvcGM_Cno": "？？",
+      "SvcGM_Sno": "？？",
+      "SvcGM_Ano": "？？",
+
+      "svcgm_gzjc_bw1": "机器",//@todo
+      "svcgm_gzjc_bw2": "机器",
+      "svcgm_gzjc_bw3": "机器",
+
+      "svcgm_gzcl_by1": "机器",//@todo
+      "svcgm_gzjc_by2": "无",
+      "svcgm_gzjc_by3": "无",//@todo
+
+      "SvcGM_gzjc_gzzpgzzj": "已上传",//@todo
+      "SvcGM_gzjc_gzzpgzjj": "已上传",
+      "SvcGM_gzjc_gzzpgzyj": "已上传",
+      "SvcGM_gzjc_gzzpgzjc": "已上传",
+      "SvcGM_gzjc_gzzpjh": "已上传",
+      "SvcGM_gzjc_gzzpzj": "已上传",//@todo
+
+      "svcgm_gzjc_wtrhjj": "不解决",
+      "svcgm_sfys": "是",
+
+      "svcgm_gzfsrq": "2018-04-01T00:00:00.000",
+      "svcgm_zcwcrq": "2018-04-08T00:00:00.000",
+      "svcgm_sendtime": "2018-04-06T11:15:27.000",
+      "svcgm_rwh": "RW20180410007",
+
+
+      "svcgm_gzjc_gzyy": "语音识别结果为空",
+      "SvcGM_gzcl_wxfy": "？？",
+      "svcgm_gzjc_sfjxgzcl": "是",
+      "svcgm_gzcl_sfxf": "是",
+      "svcgm_sftj": "否",
+      "SvcGM_gzjc_by8": "？？",
+
+      "svcgm_gznr": "语音识别结果为空",
+      "svcgm_ysgsf": "12.33",
+
+      "svcgm_vcl_no": "DBB1973",//不必
+      "svcgm_oprtname": "高旭召",//不必
+      "svcgm_oprtid": "1000002269",//不必
+      "svcgm_auditstatus": "未审核"//不必
+    }
+  ],
+  "SvcCommSyqk": [
+    {
+      "svccsy_sendtime": "2018-04-05T19:15:27.000",
+      "svccsy_ry": "5#",
+      "svccsy_rwh": "RW20180410007",
+      "svccsy_dmtj": "易碎岩石",
+      "svccsy_gz": "大臂",
+      "svccsy_fjj": "无",
+      "svccsy_gztj": "水泥地",
+      "svccsy_svc_id": "9",
+      "SvcCSY_txbz": "？？",
+      "SvcCSY_hj":"？？",//@todo
+      "svccsy_gzzl": "采石场"
+    }
+  ],
+  "SvcCommYhyj": [
+    {
+      "svccyh_rwh": "RW20180410007",
+      "svccyh_mycd": "不满意",
+      "svccyh_sendtime": "2018-04-05T03:15:27.000",
+      "svccyh_svc_id": "9",
+      "SvcCYH_txbz": "??",
+      "SvcCYH_by1":"??"
+    }
+  ]
+}

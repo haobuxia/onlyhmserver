@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.VideoOrderDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.VideoOrder">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="videoId" property="videoId" jdbcType="INTEGER"/>
+        <result column="deviceid" property="deviceid" jdbcType="VARCHAR"/>
+        <result column="workorderoid" property="workorderoid" jdbcType="VARCHAR"/>
+        <result column="workoid" property="workoid" jdbcType="VARCHAR"/>
+        <result column="devicebrand" property="devicebrand" jdbcType="VARCHAR"/>
+        <result column="devicetype" property="devicetype" jdbcType="VARCHAR"/>
+        <result column="devicemodel" property="devicemodel" jdbcType="VARCHAR"/>
+        <result column="workpattern" property="workpattern" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,videoId,deviceid,workorderoid,workoid,devicebrand,devicetype,devicemodel,workpattern
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 videoId,deviceid,workorderoid,workoid,devicebrand,devicetype,devicemodel,workpattern
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id != null and id > 0 ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="videoId != null and videoId > 0 ">
+                and videoId = #{videoId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.VideoOrder" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_video_order (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{videoId},#{deviceid},#{workorderoid},#{workoid},#{devicebrand},#{devicetype},#{devicemodel},#{workpattern}
+        )
+    </insert>
+
+</mapper>

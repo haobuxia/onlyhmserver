@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.power.ApiDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.power.Api">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="urlName" property="urlName" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="menuId" property="menuId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,createTime,urlName,remark,menuId
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        createTime,urlName,remark,menuId
+    </sql>
+    <sql id="conditions">
+        <where>
+            <if test="urlName != null and urlName != ''">
+                and urlName like binary concat ('%',#{urlName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark like binary concat ('%',#{remark,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="menuId != null">
+                and menuId = #{menuId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_api
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_api
+        WHERE id=#{id}
+    </select>
+
+    <select id="listByNoPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_api
+        <include refid="conditions" />
+        ORDER BY id
+    </select>
+
+</mapper>

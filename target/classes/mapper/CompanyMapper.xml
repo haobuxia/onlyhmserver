@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.CompanyDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.Company">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="companyNature" property="companyNature" jdbcType="INTEGER" />
+        <result column="province" property="province" jdbcType="INTEGER" />
+        <result column="city" property="city" jdbcType="INTEGER" />
+        <result column="contact" property="contact" jdbcType="VARCHAR" />
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,createTime,companyName,address,companyNature,province,city,contact,contactNumber,status
+    </sql>
+    <sql id="Base_Column_list_NoId">
+        createTime,companyName,address,companyNature,province,city,contact,contactNumber,status
+    </sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="companyName != null and companyName != ''">
+                and companyName like binary concat('%',#{companyName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address,jdbcType=VARCHAR}
+            </if>
+            <if test="companyNature != null">
+                and companyNature = #{companyNature,jdbcType=INTEGER}
+            </if>
+            <if test="province != null">
+                and province = #{province,jdbcType=INTEGER}
+            </if>
+            <if test="city != null">
+                and city = #{city,jdbcType=INTEGER}
+            </if>
+            <if test="contact != null and contact != ''">
+                and contact like binary concat('%',#{contact,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                and contactNumber = #{contactNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.Company" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_company(
+          <include refid="Base_Column_list_NoId" />
+        )
+        VALUES (
+          #{createTime},#{companyName},#{address},#{companyNature},#{province},#{city},#{contact},#{contactNumber},1
+        )
+    </insert>
+
+    <update id="deleteById" parameterType="int">
+        UPDATE t_company
+        SET status = 0
+        WHERE id = #{id}
+    </update>
+
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.client.Company">
+        UPDATE t_company
+        <set>
+            <if test="companyName != null and companyName != ''">
+                companyName = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNature != null">
+                companyNature = #{companyNature,jdbcType=INTEGER},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=INTEGER},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=INTEGER},
+            </if>
+            <if test="contact != null and contact != ''">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                contactNumber = #{contactNumber,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="listBy" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_company
+        <include refid="conditions" />
+        ORDER BY id DESC
+        <include refid="core.page" />
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        SELECT COUNT(id)
+        FROM t_company
+        <include refid="conditions" />
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_company
+        WHERE id = #{id}
+    </select>
+
+    <select id="listByNoPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_company
+        <include refid="conditions" />
+    </select>
+
+</mapper>

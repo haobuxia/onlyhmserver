@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.ImageDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.Image">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uploadTime" property="uploadTime" jdbcType="TIMESTAMP" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="clientId" property="clientId" jdbcType="VARCHAR" />
+		<result column="neUserName" property="neUserName" jdbcType="VARCHAR" />
+		<result column="userId" property="userId" jdbcType="VARCHAR" />
+		<result column="sizeKb" property="sizeKb" jdbcType="BIGINT" />
+		<result column="imageName" property="fileName" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="thumbOssPath" property="thumbOssPath" jdbcType="VARCHAR" />
+		<result column="ossPath" property="ossPath" jdbcType="VARCHAR" />
+		<result column="viewCount" property="viewCount" jdbcType="INTEGER" />
+		<result column="machineCode" property="machineCode" jdbcType="VARCHAR" />
+		<result column="lon" property="lon" jdbcType="FLOAT" />
+		<result column="lat" property="lat" jdbcType="FLOAT" />
+		<result column="siteId" property="siteId" jdbcType="INTEGER" />
+		<result column="imageType" property="imageType" jdbcType="VARCHAR" />
+		<result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<resultMap id="GroupMap" type="com.tianyi.helmet.server.vo.DoubleVo">
+		<result column="groupKey" property="key" jdbcType="VARCHAR" />
+		<result column="cnt" property="val" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="IntGroupMap" type="com.tianyi.helmet.server.vo.DoubleVo">
+		<result column="groupKey" property="key" jdbcType="INTEGER" />
+		<result column="cnt" property="val" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="TripleMap" type="com.tianyi.helmet.server.vo.TripleVo">
+		<result column="lon" property="one" jdbcType="FLOAT" />
+		<result column="lat" property="two" jdbcType="FLOAT" />
+		<result column="cnt" property="three" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, uploadTime, createTime,clientId,neUserName,userId,sizeKb, imageName, description, thumbOssPath, ossPath, viewCount,machineCode,lon,lat,siteId,imageType,orderNo
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 uploadTime, createTime,clientId,neUserName,userId,sizeKb, imageName, description, thumbOssPath, ossPath, viewCount,machineCode,lon,lat,siteId,imageType,orderNo
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="clientId != null and clientId != '' ">
+				and clientId = #{clientId,jdbcType=VARCHAR}
+			</if>
+			<if test="clientid != null and clientid != '' ">
+				and clientId = #{clientid,jdbcType=VARCHAR}
+			</if>
+			<if test="neUserName != null and neUserName != '' ">
+				and neUserName = #{neUserName,jdbcType=VARCHAR}
+			</if>
+			<if test="userId != null and userId != '' ">
+				and userId = #{userId,jdbcType=VARCHAR}
+			</if>
+			<if test="siteId != null and siteId > 0 ">
+				and siteId = #{siteId,jdbcType=INTEGER}
+			</if>
+			<if test="imageType != null and imageType != '' ">
+				and imageType = #{imageType,jdbcType=VARCHAR}
+			</if>
+			<if test="orderNo != null and orderNo != '' ">
+				and orderNo = #{orderNo,jdbcType=VARCHAR}
+			</if>
+			<if test="hasGeo != null">
+				and lon > 0
+				and lat > 0
+			</if>
+			<if test="hasTag != null">
+				and EXISTS (select 1 from t_tag_res where t_image.id = t_tag_res.res_id and t_tag_res.resType = 2 )
+			</if>
+			<if test="groupMachineCode != null and groupMachineCode != '' ">
+				and machineCode is not null and machineCode != ''
+			</if>
+			<if test="groupSiteId != null and groupSiteId != '' ">
+				and siteId is not null and siteId > 0
+			</if>
+			<if test="machinecode != null and machinecode != '' ">
+				and machineCode = #{machinecode}
+			</if>
+			<if test="machineCode != null and machineCode != '' ">
+				and machineCode = #{machineCode}
+			</if>
+			<if test="affiliationId != null ">
+				and exists (select 1 from t_device where t_image.clientId = t_device.deviceUUID and t_device.affiliationId = #{affiliationId} )
+			</if>
+			<if test="salerId != null ">
+				and exists (select 1 from t_device where t_image.clientId = t_device.deviceUUID and t_device.salerId = #{salerId} )
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="uploadTime != null ">
+				and createTime = #{uploadTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="uploadTime1 != null ">
+				and uploadTime &gt;= #{uploadTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="uploadTime2 != null ">
+				and uploadTime &lt;= #{uploadTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="hasGeo != null">
+				and lon > 0
+				and lat > 0
+			</if>
+			<if test="hasTag != null">
+				and EXISTS (select 1 from t_tag_res where t_image.id = t_tag_res.res_id and t_tag_res.resType = 2 )
+			</if>
+			<if test="groupMachineCode != null and groupMachineCode != '' ">
+				and machineCode is not null and machineCode != ''
+			</if>
+			<if test="groupSiteId != null and groupSiteId != '' ">
+				and siteId is not null and siteId > 0
+			</if>
+			<if test="machinecode != null and machinecode != '' ">
+				and machineCode = #{machinecode}
+			</if>
+			<if test="machineCode != null and machineCode != '' ">
+				and machineCode = #{machineCode}
+			</if>
+			<if test=" (tag != null and tag != '') or (groupId != null and groupId > 0) ">
+				<choose>
+					<when test=" tag != null and tag > 0 and groupId != null and groupId > 0 ">
+						and exists(
+						select 1 from t_tag_res,t_tag
+						where t_tag_res.tagId = t_tag.id and t_tag_res.restype = 2
+						and t_tag_res.resId = t_image.id and t_tag_res.tagId = #{tag}
+						and t_tag.groupId = #{groupId}
+						)
+					</when>
+					<when test="tag != null and tag > 0 "> <!-- tag means tagId -->
+						and exists(
+						select 1 from t_tag_res
+						where t_tag_res.restype = 2
+						and t_tag_res.resId = t_image.id
+						and t_tag_res.tagId = #{tag}
+						)
+					</when>
+					<when test="groupId != null and groupId > 0 ">
+						and exists(
+						select 1 from t_tag_res,t_tag
+						where t_tag_res.tagId = t_tag.id and t_tag_res.restype = 2
+						and t_tag_res.resId = t_image.id and t_tag.groupId = #{groupId}
+						)
+					</when>
+				</choose>
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and (
+				t_image.imageName LIKE '%${keyword}%' or
+				t_image.description LIKE '%${keyword}%' or
+				t_image.machineCode LIKE '%${keyword}%' or
+				t_image.imageType LIKE '%${keyword}%' or
+				t_image.orderNo LIKE '%${keyword}%' or
+				t_image.clientId LIKE '%${keyword}%'
+				)
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.Image" useGeneratedKeys="true" keyProperty="id">
+		insert into t_image (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{uploadTime},#{createTime},#{clientId},#{neUserName},#{userId},#{sizeKb},#{fileName},#{description},#{thumbOssPath},#{ossPath},#{viewCount},#{machineCode},#{lon},#{lat},#{siteId},#{imageType},#{orderNo}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_image
+		<include refid="conditions"/>
+		order by uploadTime
+		<if test="orderBy == null || orderBy == 2 ">
+			desc
+		</if>
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_image
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_image
+		 where id = #{id}
+	</select>
+
+	<select id="groupByMachineCode" parameterType="map" resultMap="GroupMap">
+		SELECT machineCode as groupKey,count(1) as cnt
+		from t_image
+		<include refid="conditions"/>
+		group by machineCode
+		order by cnt desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="selectMachineCodeCount" resultType="int">
+		select count(distinct machineCode)
+		from t_image
+		where machineCode is not null and machineCode != ''
+	</select>
+
+	<select id="groupBySiteId" parameterType="map" resultMap="IntGroupMap">
+		SELECT siteId as groupKey,count(1) as cnt
+		from t_image
+		<include refid="conditions"/>
+		group by siteId
+		order by cnt desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="selectSiteIdCount" resultType="int">
+		select count(distinct siteId)
+		from t_image
+		where siteId is not null and siteId > 0
+	</select>
+
+	<select id="selectGeoCount" resultMap="TripleMap">
+		SELECT round(lon,2) as lon ,round(lat,3) as lat,count(*) as cnt
+		from t_image
+		where lon >0 and lat > 0
+		group by round(lon,2),round(lat,3)
+	</select>
+
+	<select id="selectTagGeoData" resultType="com.tianyi.helmet.server.vo.GeoDataVo">
+		SELECT a.lon,a.lat,a.id as resId,c.tagName
+		 from t_image a , t_tag_res b , t_tag c
+		 where a.lon > 0
+		   and a.lat > 0
+		   and a.id = b.resId and b.resType = 2
+		   and b.tagId = c.id
+	</select>
+
+	<update id="updateSiteIdByGeo" parameterType="map">
+		  update t_image
+		    set siteId = #{siteId}
+		  where round(lon,2) = round(#{lon},2)
+		    and round(lat,3) = round(#{lat},3)
+		    and exists(
+		  	   select 1 from t_tag_res where t_image.id = t_tag_res.resId and t_tag_res.resType = 2
+		    )
+	</update>
+
+	<update id="clearSiteId" parameterType="int">
+		update t_image set siteId = 0
+		where siteId = #{siteId}
+	</update>
+
+	<update id="increaseViewCount" parameterType="int">
+		update t_image
+		   set viewCount = viewCount + 1
+		  where id = #{id}
+	</update>
+
+	<update id="updateMachineCodeById" parameterType="map">
+		update t_image
+		set machineCode = #{machineCode}
+		where id = #{id}
+	</update>
+
+	<update id="updateLonLatById" parameterType="map">
+		update t_image
+		set lon = #{lon},lat = #{lat}
+		where id = #{id}
+	</update>
+
+	<update id="updateImageTypeById" parameterType="map">
+		update t_image
+		set imageType = #{imageType}
+		where id = #{id}
+	</update>
+
+	<update id="updateThumbOssPathById" parameterType="map">
+		update t_image
+		set thumbOssPath = #{thumbOssPath}
+		where id = #{id}
+	</update>
+
+	<delete id="deleteById" parameterType="int">
+		  delete from t_image where id = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="Web">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/lib/alipay" relative="WEB-INF/lib" />
+          <root url="file://$MODULE_DIR$/lib/fdfs" relative="WEB-INF/lib" />
+          <root url="file://$MODULE_DIR$/lib/kdxf" relative="WEB-INF/lib" />
+          <root url="file://$MODULE_DIR$/lib/kmx" relative="WEB-INF/lib" />
+          <root url="file://$MODULE_DIR$/lib/svcrest" relative="WEB-INF/lib" />
+          <root url="file://$MODULE_DIR$/lib/tianyi" relative="WEB-INF/lib" />
+          <root url="file://$MODULE_DIR$/src/main/resources/${profiles.active}" relative="WEB-INF/classes" />
+          <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
+        </webroots>
+      </configuration>
+    </facet>
+    <facet type="Spring" name="Spring">
+      <configuration />
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.mangofactory:swagger-springmvc:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.wordnik:swagger-annotations:1.3.11" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.mangofactory:swagger-models:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: io.springfox:springfox-swagger2:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: io.swagger:swagger-models:1.5.10" level="project" />
+    <orderEntry type="library" name="Maven: io.springfox:springfox-spi:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: io.springfox:springfox-core:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: io.springfox:springfox-schema:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: io.springfox:springfox-swagger-common:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: io.springfox:springfox-spring-web:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.mapstruct:mapstruct:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.springfox:springfox-swagger-ui:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.54" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.4" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:4.1.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.aspectj:aspectjrt:1.8.9" level="project" />
+    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.8.9" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aspects:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context-support:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.quartz-scheduler:quartz:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: c3p0:c3p0:0.9.1.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.6" level="project" />
+    <orderEntry type="library" name="Maven: commons-dbcp:commons-dbcp:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.mybatis:mybatis:3.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.mybatis:mybatis-typehandlers-jsr310:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:1.3.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.mybatis:mybatis-spring:1.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: redis.clients:jedis:2.8.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.4.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-redis:1.7.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-keyvalue:1.1.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.12.1.RELEASE" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:jcl-over-slf4j:1.7.19" level="project" />
+    <orderEntry type="library" name="Maven: jstl:jstl:1.2" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.38" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: ty:kmxsdk:4.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/kmx/kmx-sdk.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.websocket:javax.websocket-api:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.neethi:neethi:2.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ws.commons.axiom:axiom-api:1.2.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.2" level="project" />
+    <orderEntry type="library" name="Maven: jaxen:jaxen:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: xerces:xercesImpl:2.6.2" level="project" />
+    <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.3.04" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ws.commons.axiom:axiom-impl:1.2.7" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:wstx-asl:3.2.4" level="project" />
+    <orderEntry type="library" name="Maven: stax:stax-api:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.baidu.aip:java-sdk:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20160810" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: kdxf:lfasr:2.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/kdxf/lfasr-sdk-client-2.0.0.1005-jar-with-dependencies.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: org.csource:fastdfs-client-java:1.27-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/fdfs/fastdfs-client-java-1.27-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: alipay:alipay-sdk-java:20180122">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/alipay/alipay-sdk-java20180122110032.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: alipay:alipay-trade-java:20180122">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/alipay/alipay-trade-sdk.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.tianyi.svc:rest-entity:1.2-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/svcrest/rest-entity-1.2-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.tianyi.svc:rest-sdk:1.2-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/svcrest/rest-sdk-1.2-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Maven: io.swagger:swagger-annotations:1.5.14" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.poi:poi:3.17" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.poi:poi-ooxml:3.17" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.poi:poi-ooxml-schemas:3.17" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.virtuald:curvesapi:1.04" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-test:4.3.2.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.apache.httpcomponents:httpmime:4.5.2" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.tianyi.datainterface:TyDataInterface:1.1-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/tianyi/TyDataInterface-1.1-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: cn.edu.thu.tianyuan:LZ77Decompression:1.0-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/tianyi/LZ77Decompression-1.0-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.ty.pub.parser:100DPARSER:1.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/tianyi/com.ty.pub.parser.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Maven: org.apache.axis:axis:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.axis:axis-jaxrpc:1.4" level="project" />
+    <orderEntry type="library" name="Maven: commons-discovery:commons-discovery:0.2" level="project" />
+    <orderEntry type="library" name="Maven: wsdl4j:wsdl4j:1.6.3" level="project" />
+    <orderEntry type="library" name="Maven: com.rabbitmq:amqp-client:3.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.amqp:spring-rabbit:1.4.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.retry:spring-retry:1.1.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.amqp:spring-amqp:1.4.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-messaging:4.1.6.RELEASE" level="project" />
+  </component>
+</module>

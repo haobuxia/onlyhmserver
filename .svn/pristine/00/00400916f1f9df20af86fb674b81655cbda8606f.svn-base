@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.WeixinUserDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.WeixinUser">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="wxId" property="wxId" jdbcType="VARCHAR" />
+		<result column="nickName" property="nickName" jdbcType="VARCHAR" />
+		<result column="wxSex" property="wxSex" jdbcType="INTEGER" />
+		<result column="subscribeTime" property="subscribeTime" jdbcType="TIMESTAMP" />
+		<result column="appUserId" property="appUserId" jdbcType="INTEGER" />
+		<result column="bindAppTime" property="bindAppTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, wxId,nickName,wxSex,subscribeTime,appUserId,bindAppTime
+	</sql>
+	
+	<sql id="Base_Column_List_NoId">
+		 wxId,nickName,wxSex,subscribeTime,appUserId,bindAppTime
+	</sql>
+
+	<sql id="conditions">
+		<where>
+			<if test="wxId != null and wxId != ''">
+				and wxId = #{wxId,jdbcType=VARCHAR}
+			</if>
+			<if test="nickName != null and nickName != '' ">
+				and nickName = #{nickName,jdbcType=VARCHAR}
+			</if>
+			<if test="wxSex != null ">
+				and wxSex = #{wxSex,jdbcType=INTEGER}
+			</if>
+			<if test="appUserId != null and appUserId != '' ">
+				and appUserId = #{appUserId,jdbcType=VARCHAR}
+			</if>
+			<if test="subscribeTime != null ">
+				and subscribeTime = #{subscribeTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="subscribeTime1 != null ">
+				and subscribeTime &gt;= #{subscribeTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="subscribeTime2 != null ">
+				and subscribeTime &lt;= #{subscribeTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="bindAppTime != null ">
+				and bindAppTime = #{bindAppTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="bindAppTime1 != null ">
+				and bindAppTime &gt;= #{bindAppTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="bindAppTime2 != null ">
+				and bindAppTime &lt;= #{bindAppTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="idList != null and idList.size > 0  ">
+				and id IN
+				<foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.WeixinUser" useGeneratedKeys="true" keyProperty="id">
+		insert into t_weixin_user (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{wxId},#{nickName},#{wxSex},#{subscribeTime},#{appUserId},#{bindAppTime}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_weixin_user
+		<include refid="conditions"/>
+		order by subscribeTime desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_weixin_user
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_weixin_user
+		 where id = #{id}
+	</select>
+
+	<select id="selectByWxId" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_weixin_user
+		where wxId = #{wxId}
+	</select>
+
+	<select id="selectByTianyiUserId" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_weixin_user
+		where appUserId = #{appUserId}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		  delete from t_weixin_user where id = #{id}
+	</delete>
+
+	<update id="updateBindAppUserInfo" parameterType="map">
+		update t_weixin_user
+           set appUserId = #{appUserId,jdbcType=VARCHAR},
+                bindAppTime = #{bindAppTime,jdbcType=TIMESTAMP}
+        where id = #{id}
+	</update>
+
+	<update id="updateById" parameterType="com.tianyi.helmet.server.entity.client.WeixinUser">
+		update t_weixin_user
+		<set>
+			<if test="wxId != null and wxId != ''">
+				wxId = #{wxId,jdbcType=VARCHAR},
+			</if>
+			<if test="nickName != null and nickName != ''">
+				nickName = #{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="wxSex != null ">
+				wxSex = #{wxSex,jdbcType=INTEGER},
+			</if>
+			<if test="subscribeTime != null ">
+				subscribeTime = #{subscribeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="appUserId != null ">
+				appUserId = #{appUserId,jdbcType=INTEGER},
+			</if>
+			<if test="subscribeTime != null ">
+				bindAppTime = #{bindAppTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

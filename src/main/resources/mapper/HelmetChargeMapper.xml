@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.HelmetChargeDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.HelmetCharge">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="clientId" property="clientId" jdbcType="VARCHAR" />
+        <result column="neUsername" property="neUsername" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="onlineTime" property="onlineTime" jdbcType="TIMESTAMP" />
+        <result column="offlineTime" property="offlineTime" jdbcType="TIMESTAMP" />
+        <result column="userName" property="userName" jdbcType="VARCHAR" />
+        <result column="userId" property="userId" jdbcType="INTEGER" />
+        <result column="uid" property="uid" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,createTime,clientId,neUsername,status,onlineTime,offlineTime,userId,userName,uid
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        createTime,clientId,neUsername,status,onlineTime,offlineTime,userId,userName,uid
+    </sql>
+    <sql id="tjconditions">
+        <where>
+            <if test="clientId != null and clientId != ''">
+                and clientId = #{clientId,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != ''">
+                and userId = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="uid != null and uid != ''">
+                and uid = #{uid,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceNumber != null and deviceNumber != '' ">
+                and exists(
+                  select 1 from t_device where t_HelmetCharge.clientId = t_device.deviceUUID and t_device.deviceNumber = #{deviceNumber,jdbcType=VARCHAR}
+                )
+            </if>
+            <if test="userName != null and userName != ''">
+                and userName  LIKE '%${userName}%'
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and onlineTime &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and onlineTime &lt;= #{endTime}
+            </if>
+            and status = 1 and userId is not null
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.HelmetCharge" useGeneratedKeys="true" keyProperty="id">
+        insert into t_HelmetCharge (
+          <include refid="Base_Column_List_NoId" />
+        )
+        values (
+          #{createTime},#{clientId},#{neUsername},#{status},#{onlineTime},#{offlineTime},#{userId},#{userName},#{uid}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.data.HelmetCharge">
+        UPDATE t_HelmetCharge SET
+        offlineTime = #{offlineTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER}
+        WHERE id = #{id}
+    </update>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        SELECT COUNT(id)
+        FROM t_HelmetCharge
+        <include refid="tjconditions" />
+    </select>
+</mapper>

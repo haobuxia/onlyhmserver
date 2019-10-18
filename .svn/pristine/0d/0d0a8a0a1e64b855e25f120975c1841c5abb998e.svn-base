@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.VideoLocationDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.VideoLocation">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="videoId" property="videoId" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="poi" property="poi" jdbcType="VARCHAR"/>
+        <result column="direction" property="direction" jdbcType="VARCHAR"/>
+        <result column="distance" property="distance" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="township" property="township" jdbcType="VARCHAR"/>
+        <result column="district" property="district" jdbcType="VARCHAR"/>
+        <result column="street" property="street" jdbcType="VARCHAR"/>
+        <result column="adcode" property="adcode" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,videoId,description,poi,direction,distance,province,city,township,district,street,adcode
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 videoId,description,poi,direction,distance,province,city,township,district,street,adcode
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id != null and id > 0 ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="videoId != null and videoId > 0 ">
+                and videoId = #{videoId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.VideoLocation" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_video_location (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{videoId},#{description},#{poi},#{direction},#{distance},#{province},#{city},#{township},#{district},#{street},#{adcode}
+        )
+    </insert>
+
+</mapper>

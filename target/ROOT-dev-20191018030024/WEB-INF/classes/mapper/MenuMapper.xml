@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.power.MenuDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.power.Menu">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="menuName" property="menuName" jdbcType="VARCHAR" />
+        <result column="fatherId" property="fatherId" jdbcType="INTEGER" />
+        <result column="menuPage" property="menuPage" jdbcType="VARCHAR" />
+        <result column="menuImage" property="menuImage" jdbcType="VARCHAR" />
+        <result column="menuType" property="menuType" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="TreeResultMap" type="com.tianyi.helmet.server.entity.power.MenuDTO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="menuName" property="menuName" jdbcType="VARCHAR" />
+        <result column="fatherId" property="fatherId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,createTime,menuName,fatherId,menuPage,menuImage,menuType
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        createTime,menuName,fatherId,menuPage,menuImage,menuType
+    </sql>
+    <sql id="conditions">
+        <where>
+            <if test="menuName != null and menuName != ''">
+                and menuName=#{menuName,jdbcType=VARCHAR}
+            </if>
+            <if test="fatherId != null">
+                and fatherId=#{fatherId,jdbcType=INTEGER}
+            </if>
+            <if test="menuType != null">
+                and menuType=#{menuType,jdbcType=INTEGER}
+            </if>
+            <if test="id != null">
+                and id=#{id,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_menu
+        WHERE menuPage IS NOT NULL AND menuPage &lt;&gt; ''
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_menu
+        WHERE id=#{id}
+    </select>
+
+    <select id="listByNoPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_menu
+        <include refid="conditions" />
+        ORDER BY id
+    </select>
+
+    <select id="treeList" parameterType="map" resultMap="TreeResultMap">
+        SELECT
+        id,menuName,fatherId
+        FROM t_menu
+        <include refid="conditions" />
+        ORDER BY id
+    </select>
+
+    <select id="roleTreeList" parameterType="map" resultMap="TreeResultMap">
+        SELECT DISTINCT
+        m.id,m.menuName,m.fatherId
+        FROM t_menu m
+        join t_rolemenu rm on m.id=rm.menuId
+        join t_user s on concat(concat(',',s.roleCodes),',') like concat(concat('%,',rm.roleId),',%') and s.id=#{userId}
+        <include refid="conditions" />
+        ORDER BY m.id
+    </select>
+</mapper>

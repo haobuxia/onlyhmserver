@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.scene.WorkOrderStrategyDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.scene.svc.WorkOrderStrategy">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="priority" property="priority" jdbcType="INTEGER"/>
+        <result column="eventType" property="eventType" jdbcType="VARCHAR"/>
+        <result column="eventVal" property="eventVal" jdbcType="VARCHAR"/>
+        <result column="actionType" property="actionType" jdbcType="VARCHAR"/>
+        <result column="actionVal" property="actionVal" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,orderNo,priority,eventType,eventVal,actionType,actionVal
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		orderNo,priority,eventType,eventVal,actionType,actionVal
+	</sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.scene.svc.WorkOrderStrategy"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_workorder_stg (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+          #{orderNo},#{priority},#{eventType},#{eventVal},#{actionType},#{actionVal}
+        )
+    </insert>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workorder_stg
+        where id = #{id}
+    </select>
+
+    <select id="selectByOrderNo" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workorder_stg
+        where orderNo = #{orderNo}
+    </select>
+
+    <delete id="deleteByOrderNo" parameterType="string">
+		delete from t_workorder_stg where orderNo = #{orderNo}
+	</delete>
+
+    <delete id="deleteById" parameterType="int">
+        delete from t_workorder_stg where id = #{id}
+    </delete>
+
+</mapper>

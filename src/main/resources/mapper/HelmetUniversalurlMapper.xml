@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.HelmetUniversalurlDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.HelmetUniversalurlInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+        <result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="urltype" property="urltype" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, urltype, url ,uid
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		urltype, url ,uid
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="urltype != null and urltype != ''">
+				and urltype = #{urltype,jdbcType=VARCHAR}
+			</if>
+			<if test="uid != null">
+				and uid = #{uid,jdbcType=INTEGER}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.HelmetUniversalurlInfo" useGeneratedKeys="true" keyProperty="id">
+		insert IGNORE  into t_helmetuniversalurl (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{urltype},#{url},#{uid}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_helmetuniversalurl
+		<include refid="conditions"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_helmetuniversalurl
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_helmetuniversalurl
+		 where id = #{id}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		  delete from t_helmetuniversalurl where id = #{id}
+	</delete>
+
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.client.HelmetUniversalurlInfo">
+        UPDATE t_helmetuniversalurl
+        <set>
+			<if test="uid != null and uid != ''">
+				uid = #{uid,jdbcType=INTEGER},
+			</if>
+            <if test="urltype != null and urltype != ''">
+				urltype = #{urltype,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null and url != ''">
+				url = #{url,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

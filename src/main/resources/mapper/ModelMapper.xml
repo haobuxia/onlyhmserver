@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.dictionary.ModelDao">
+    <select id="selectModel" resultType="map">
+        SELECT id,model FROM t_device_model
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertModel" parameterType="string">
+        INSERT INTO t_device_model
+        (model)
+        VALUES
+        (#{model})
+    </insert>
+</mapper>

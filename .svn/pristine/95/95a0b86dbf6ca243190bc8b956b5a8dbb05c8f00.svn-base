@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.device.EquipmentDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.device.EquipmentLedger">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="affiliationId" property="affiliationId" jdbcType="INTEGER"/>
+        <result column="categoryId" property="categoryId" jdbcType="INTEGER"/>
+        <result column="deviceNumber" property="deviceNumber" jdbcType="VARCHAR"/>
+        <result column="deviceUUID" property="deviceUUID" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="batch" property="batch" jdbcType="VARCHAR"/>
+        <result column="versionId" property="versionId" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="flag" property="flag" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="possessorId" property="possessorId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,userId,affiliationId,categoryId,deviceNumber,deviceUUID,model,batch,versionId,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i') updateTime,flag,status,possessorId
+	</sql>
+    <sql id="Base_Column_List_NoId">
+        userId,affiliationId,categoryId,deviceNumber,deviceUUID,model,batch,versionId,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i') updateTime,flag,status,possessorId
+    </sql>
+    <sql id="Base_Column_List_His">
+		id,userId,affiliationId,categoryId,deviceNumber,deviceUUID,model,batch,versionId,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i') updateTime,flag,status,DATE_FORMAT(startTime,'%Y-%m-%d %H:%i') startTime,DATE_FORMAT(endTime,'%Y-%m-%d %H:%i') endTime,remark,possessorId
+	</sql>
+    <sql id="conditions">
+        <where>
+            <if test="userId != null and userId != ''">
+                and userId = #{userId}
+            </if>
+            <if test="possessorId != null and possessorId != ''">
+                and possessorId = #{possessorId}
+            </if>
+            <if test="affiliationId != null and affiliationId != '' ">
+                and affiliationId = #{affiliationId}
+            </if>
+            <if test="categoryId != null and categoryId != '' ">
+                and categoryId = #{categoryId}
+            </if>
+            <if test="deviceNumber != null and deviceNumber != '' ">
+                and deviceNumber like '%${deviceNumber}%'
+            </if>
+            <if test="deviceUUID != null and deviceUUID != '' ">
+                and deviceUUID = #{deviceUUID}
+            </if>
+            <if test="model != null and model != '' ">
+                and model LIKE binary concat('%',#{model},'%')
+            </if>
+            <if test="keyword != null and keyword != '' ">
+                <!-- 持有人与单位需要关联用户表和单位表 -->
+                and (
+                category like binary '%${keyword}%' OR
+                model like binary '%${keyword}%' OR
+                batch like binary '%${keyword}%' OR
+                version like binary '%${keyword}%' OR
+                createTime like binary '%${keyword}%'
+                )
+            </if>
+            <if test="batch != null and batch != '' ">
+                and batch LIKE binary concat('%',#{batch},'%')
+            </if>
+            <if test="versionId != null and versionId != '' ">
+                and versionId = #{versionId}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and createTime &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and createTime &lt;= #{endTime}
+            </if>
+            <if test="updateTime != null and updateTime != '' ">
+                and updateTime = #{updateTime}
+            </if>
+            <if test="flag != null and flag != '' and flag == 1">
+                and (flag = 1 or flag = 2)
+            </if>
+            <if test="flag != null and flag != '' and flag == 2">
+                and flag = #{flag}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </sql>
+    <sql id="conditions_history">
+        <where>
+            <if test="userId != null and userId != ''">
+                and userId = #{userId}
+            </if>
+            <if test="possessorId != null and possessorId != ''">
+                and possessorId = #{possessorId}
+            </if>
+            <if test="affiliationId != null and affiliationId != '' ">
+                and affiliationId = #{affiliationId}
+            </if>
+            <if test="categoryId != null and categoryId != '' ">
+                and categoryId = #{categoryId}
+            </if>
+            <if test="deviceNumber != null and deviceNumber != '' ">
+                and deviceNumber like '%${deviceNumber}%'
+            </if>
+            <if test="deviceUUID != null and deviceUUID != '' ">
+                and deviceUUID = #{deviceUUID}
+            </if>
+            <if test="model != null and model != '' ">
+                and model LIKE binary concat('%',#{model},'%')
+
+            </if>
+            <if test="keyword != null and keyword != '' ">
+                <!-- 持有人与单位需要关联用户表和单位表 -->
+                and (
+                userId like binary '%${keyword}%' OR
+                affiliationId like binary '%${keyword}%' OR
+                model like binary '%${keyword}%' OR
+                batch like binary '%${keyword}%' OR
+                createTime like binary '%${keyword}%'
+                )
+            </if>
+            <if test="batch != null and batch != '' ">
+                and batch LIKE #{batch}
+            </if>
+            <if test="versionId != null and versionId != '' ">
+                and versionId = #{versionId}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and createTime = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != '' ">
+                and updateTime = #{updateTime}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and startTime &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != '' ">
+                and endTime &lt;= #{endTime}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.device.EquipmentLedger" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_device (
+        userId,affiliationId,categoryId,deviceNumber,deviceUUID,model,batch,versionId,createTime,updateTime,flag,status,possessorId
+        )
+        values (
+        #{userId},#{affiliationId},#{categoryId},#{deviceNumber},#{deviceUUID},#{model},#{batch},#{versionId},#{createTime},#{updateTime},#{flag},#{status},#{possessorId}
+        )
+    </insert>
+
+    <select id="select" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_device
+        <include refid="conditions"/>
+        order BY
+        createTime DESC ,id DESC
+        <include refid="core.page"/>
+    </select>
+    <select id="selectHistory" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List_His"/>
+        from t_device_history
+        <include refid="conditions_history"/>
+        order BY
+        updateTime DESC ,id DESC
+        <include refid="core.page"/>
+    </select>
+
+    <select id="getByDeviceUUID" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_device
+        where deviceUUID = #{deviceUUID}
+    </select>
+    <select id="getByDeviceNumber" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_device
+        where deviceNumber = #{deviceNumber}
+    </select>
+    <select id="countBy" parameterType="map" resultType="int">
+        SELECT COUNT(id)
+        FROM t_device
+        <include refid="conditions"/>
+    </select>
+    <select id="countByHistory" parameterType="map" resultType="int">
+        SELECT COUNT(id)
+        FROM t_device_history
+        <include refid="conditions_history"/>
+    </select>
+
+    <!--<select id="countBy" parameterType="map" resultType="int">
+        select count(1)
+        from t_device
+        <include refid="conditions"/>
+    </select>-->
+
+    <update id="updateUserId" parameterType="com.tianyi.helmet.server.entity.device.EquipmentLedger">
+        update t_device
+        <set>
+            updateTime = NOW()
+            <if test="userId != null and userId != ''">
+                ,userId = #{userId}
+            </if>
+            <if test="affiliationId != null and affiliationId != ''">
+                ,affiliationId = #{affiliationId}
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                ,categoryId = #{categoryId}
+            </if>
+            <if test="deviceNumber != null and deviceNumber != ''">
+                ,deviceNumber = #{deviceNumber}
+            </if>
+            <if test="model != null and model != ''">
+                ,model = #{model}
+            </if>
+            <if test="batch != null and batch != ''">
+                ,batch = #{batch}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                ,versionId = #{versionId}
+            </if>
+            <if test="flag != null and flag != ''">
+                ,flag = #{flag}
+            </if>
+            <if test="status != null and status != ''">
+                ,status = #{status}
+            </if>
+        </set>
+        where deviceUUID = #{deviceUUID}
+    </update>
+
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.device.EquipmentLedger">
+        update t_device
+        <set>
+            updateTime = NOW()
+            <if test="userId != null and userId != ''">
+                ,userId = #{userId}
+            </if>
+            <if test="affiliationId != null and affiliationId != ''">
+                ,affiliationId = #{affiliationId}
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                ,categoryId = #{categoryId}
+            </if>
+            <if test="deviceNumber != null and deviceNumber != ''">
+                ,deviceNumber = #{deviceNumber}
+            </if>
+            <if test="model != null and model != ''">
+                ,model = #{model}
+            </if>
+            <if test="batch != null and batch != ''">
+                ,batch = #{batch}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                ,versionId = #{versionId}
+            </if>
+            <if test="flag != null and flag != ''">
+                ,flag = #{flag}
+            </if>
+            <if test="status != null and status != ''">
+                ,status = #{status}
+            </if>
+        </set>
+        where deviceUUID = #{deviceUUID}
+    </update>
+
+
+    <update id="updateHistory" parameterType="com.tianyi.helmet.server.entity.device.EquipmentLedger">
+        update t_device_history
+        <set>
+            updateTime = NOW()
+            <if test="userId != null and userId != ''">
+                ,userId = #{userId}
+            </if>
+            <if test="affiliationId != null and affiliationId != ''">
+                ,affiliationId = #{affiliationId}
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                ,categoryId = #{categoryId}
+            </if>
+            <if test="deviceNumber != null and deviceNumber != ''">
+                ,deviceNumber = #{deviceNumber}
+            </if>
+            <if test="model != null and model != ''">
+                ,model = #{model}
+            </if>
+            <if test="batch != null and batch != ''">
+                ,batch = #{batch}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                ,versionId = #{versionId}
+            </if>
+            <if test="flag != null and flag != ''">
+                ,flag = #{flag}
+            </if>
+            <if test="status != null and status != ''">
+                ,status = #{status}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                ,endTime = #{endTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                ,remark = #{remark}
+            </if>
+        </set>
+        where endTime is null and deviceUUID = #{deviceUUID}
+    </update>
+
+    <delete id="updateById" parameterType="string">
+		UPDATE t_device
+		SET flag = 3,status = 5,userId = -1
+		where deviceUUID = #{deviceUUID}
+	</delete>
+
+    <insert id="insertHistory" parameterType="com.tianyi.helmet.server.entity.device.EquipmentLedger">
+        INSERT into t_device_history
+        (
+        createTime,
+        updateTime
+        <if test="userId != null and userId != ''">
+            ,userId
+        </if>
+        <if test="affiliationId != null and affiliationId != ''">
+            ,affiliationId
+        </if>
+        <if test="categoryId != null and categoryId != ''">
+            ,categoryId
+        </if>
+        <if test="deviceNumber != null and deviceNumber != ''">
+            ,deviceNumber
+        </if>
+        <if test="deviceUUID != null and deviceUUID != ''">
+            ,deviceUUID
+        </if>
+        <if test="model != null and model != ''">
+            ,model
+        </if>
+        <if test="batch != null and batch != ''">
+            ,batch
+        </if>
+        <if test="versionId != null and versionId != ''">
+            ,versionId
+        </if>
+        <if test="flag != null and flag != ''">
+            ,flag
+        </if>
+        <if test="startTime != null and startTime != ''">
+            ,startTime
+        </if>
+        <if test="status != null and status != ''">
+            ,status
+        </if>
+        <if test="endTime != null and endTime != ''">
+            ,endTime
+        </if>
+        <if test="remark != null and remark != ''">
+            ,remark
+        </if>
+        )
+        VALUE
+        (
+        #{createTime},
+        now()
+        <if test="userId != null and userId != ''">
+            ,#{userId}
+        </if>
+        <if test="affiliationId != null and affiliationId != ''">
+            ,#{affiliationId}
+        </if>
+        <if test="categoryId != null and categoryId != ''">
+            ,#{categoryId}
+        </if>
+        <if test="deviceNumber != null and deviceNumber != ''">
+            ,#{deviceNumber}
+        </if>
+        <if test="deviceUUID != null and deviceUUID != ''">
+            ,#{deviceUUID}
+        </if>
+        <if test="model != null and model != ''">
+            ,#{model}
+        </if>
+        <if test="batch != null and batch != ''">
+            ,#{batch}
+        </if>
+        <if test="versionId != null and versionId != ''">
+            ,#{versionId}
+        </if>
+        <if test="flag != null and flag != ''">
+            ,#{flag}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            ,#{startTime}
+        </if>
+        <if test="status != null and status != ''">
+            ,#{status}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            ,#{endTime}
+        </if>
+        <if test="remark != null and remark != ''">
+            ,#{remark}
+        </if>
+
+        )
+    </insert>
+
+    <insert id="insertReason" parameterType="map">
+        INSERT INTO t_device_reason
+        (deviceUUID,reason)
+        VALUES
+        (#{deviceUUID},#{reason})
+
+    </insert>
+
+    <select id="getBlueBoxMac" parameterType="int" resultType="string">
+        SELECT b.mac
+        FROM t_bluebox b
+        where b.deviceId=#{deviceId}
+    </select>
+
+</mapper>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <context:annotation-config/>
+
+    <context:component-scan base-package="com.tianyi.helmet.server.controller" annotation-config="true">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    <!-- spring 扫描注解配置 -->
+    <context:component-scan base-package="com.tianyi.helmet.server.quartz"></context:component-scan>
+    <!-- 开启这个配置 spring才能识别@Scheduled注解 -->
+    <task:annotation-driven scheduler="qbScheduler" mode="proxy"/>
+    <task:scheduler id="qbScheduler" pool-size="10"/>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <ref bean="jsonConverter"/>
+            <ref bean="stringHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <mvc:default-servlet-handler/>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="209715200"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    <bean id="jsonConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes" value="application/json"/>
+    </bean>
+
+    <bean id="stringHttpMessageConverter"
+          class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+                <value>text/plain;charset=UTF-8</value>
+                <value>application/json;charset:UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 引入swagger相关 -->
+    <bean class="com.tianyi.helmet.server.util.MySwaggerConfig"/>
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
+    <bean class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration" id="swagger2Config"/>
+    <mvc:default-servlet-handler/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <mvc:default-servlet-handler/>
+
+    <mvc:interceptors>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <ref bean="versionInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/apk/**"/>
+            <mvc:mapping path="/console/**"/>
+            <mvc:mapping path="/neteasevideo/**"/>
+            <mvc:mapping path="/customer/**"/>
+            <mvc:mapping path="/helmet/**"/>
+            <mvc:mapping path="/im/**"/>
+            <mvc:mapping path="/imei/**"/>
+            <mvc:mapping path="/personal/**"/>
+            <mvc:mapping path="/tianyiuser/**"/>
+            <mvc:mapping path="/image/machinecode/**"/>
+            <mvc:mapping path="/image/siteid/**"/>
+            <mvc:mapping path="/video/machinecode/**"/>
+            <mvc:mapping path="/video/siteid/**"/>
+            <mvc:mapping path="/list/**"/>
+            <mvc:mapping path="/media/**"/>
+            <mvc:mapping path="/**/play/**"/>
+            <mvc:mapping path="/videoext/**"/>
+            <mvc:mapping path="/videoaction/**"/>
+            <mvc:mapping path="/track/**"/>
+            <mvc:mapping path="/tag/**"/>
+            <mvc:mapping path="/tagres/**"/>
+            <mvc:mapping path="/uploadfile/**"/>
+            <mvc:mapping path="/kmx/**"/>
+            <mvc:mapping path="/helmetlog/**"/>
+            <mvc:mapping path="/userlog/**"/>
+            <mvc:mapping path="/neteaseuser/**"/>
+            <mvc:mapping path="/site/**"/>
+            <mvc:mapping path="/recirculate/**"/>
+            <mvc:mapping path="/service/**"/>
+            <mvc:mapping path="/alipayquery/**"/>
+            <mvc:mapping path="/tianyicontact/**"/>
+            <!--<mvc:mapping path="/workordermanage/**"/>-->
+            <mvc:mapping path="/workorderstrategy/**"/>
+            <mvc:mapping path="/typartdata/**"/>
+            <mvc:mapping path="/videoexcel/**"/>
+            <mvc:mapping path="/device/ledger/get/keyword"/>
+            <mvc:mapping path="/device/ledger/list"/>
+            <mvc:mapping path="/device/ledger/delivery"/>
+            <mvc:mapping path="/device/ledger/delete"/>
+            <mvc:mapping path="/device/ledger/get/history"/>
+            <mvc:mapping path="/device/ledger/delivery"/>
+            <mvc:mapping path="/device/ledger/clear"/>
+            <mvc:mapping path="/device/index"/>
+            <mvc:mapping path="/device/gettoken"/>
+            <mvc:mapping path="/device/refreshall"/>
+            <mvc:mapping path="/device/refresh/range/{clientId}"/>
+
+            <mvc:mapping path="/user/add" />
+            <mvc:mapping path="/user/delete" />
+            <mvc:mapping path="/user/update" />
+            <mvc:mapping path="/user/list" />
+            <mvc:mapping path="/company/add" />
+            <mvc:mapping path="/company/delete" />
+            <mvc:mapping path="/company/update" />
+            <mvc:mapping path="/company/list" />
+            <mvc:mapping path="/role/add" />
+            <mvc:mapping path="/role/delete" />
+            <mvc:mapping path="role/update" />
+            <mvc:mapping path="/role/list" />
+            <mvc:mapping path="/user/welcome" />
+            <mvc:mapping path="/company/welcome" />
+            <mvc:mapping path="/device/index" />
+            <mvc:mapping path="/device/ledger/list1" />
+            <mvc:mapping path="/device/ledger/list2" />
+            <mvc:mapping path="/device/ledger/list3" />
+            <mvc:mapping path="/imei/index" />
+            <mvc:mapping path="/role/welcome" />
+            <mvc:mapping path="/media/index" />
+            <mvc:mapping path="/helmet/index" />
+            <mvc:mapping path="/site/index" />
+            <mvc:mapping path="/tianyicontact/list" />
+            <mvc:mapping path="/workordermanage/index" />
+            <mvc:mapping path="/apk/file/list" />
+            <mvc:mapping path="/apk/update/list" />
+            <mvc:mapping path="/helmetlog/list" />
+            <mvc:mapping path="/userlog/list" />
+            <mvc:mapping path="/operalog/list" />
+            <mvc:mapping path="/kmx/listData" />
+            <mvc:mapping path="/tag/list" />
+            <mvc:mapping path="/neteasevideo/faillist" />
+
+            <ref bean="logonCheckInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/user/add" />
+            <mvc:mapping path="/user/delete" />
+            <mvc:mapping path="/user/update" />
+            <mvc:mapping path="/user/list" />
+            <mvc:mapping path="/company/add" />
+            <mvc:mapping path="/company/delete" />
+            <mvc:mapping path="/company/update" />
+            <mvc:mapping path="/company/list" />
+            <mvc:mapping path="/role/add" />
+            <mvc:mapping path="/role/delete" />
+            <mvc:mapping path="role/update" />
+            <mvc:mapping path="/role/list" />
+            <mvc:mapping path="/user/welcome" />
+            <mvc:mapping path="/company/welcome" />
+            <mvc:mapping path="/device/index" />
+            <mvc:mapping path="/device/ledger/list1" />
+            <mvc:mapping path="/device/ledger/list2" />
+            <mvc:mapping path="/device/ledger/list3" />
+            <mvc:mapping path="/imei/index" />
+            <mvc:mapping path="/role/welcome" />
+            <mvc:mapping path="/media/index" />
+            <mvc:mapping path="/helmet/index" />
+            <mvc:mapping path="/site/index" />
+            <mvc:mapping path="/tianyicontact/list" />
+            <mvc:mapping path="/workordermanage/index" />
+            <mvc:mapping path="/apk/file/list" />
+            <mvc:mapping path="/apk/update/list" />
+            <mvc:mapping path="/helmetlog/list" />
+            <mvc:mapping path="/userlog/list" />
+            <mvc:mapping path="/operalog/list" />
+            <mvc:mapping path="/kmx/listData" />
+            <mvc:mapping path="/tag/list" />
+            <mvc:mapping path="/neteasevideo/faillist" />
+            <ref bean="powerInterceptor" />
+        </mvc:interceptor>
+
+        <!--
+            <mvc:mapping path="/appupdate/**"/>
+            <mvc:mapping path="/common/**"/>
+            <mvc:mapping path="/netease/receiveMessage"/>
+        -->
+
+        <mvc:interceptor>
+            <mvc:mapping path="/common/testsign"/>
+
+            <mvc:mapping path="/audio/upload"/>
+            <mvc:mapping path="/file/upload"/>
+            <mvc:mapping path="/file/bigfile/**"/>
+            <mvc:mapping path="/image/upload"/>
+            <mvc:mapping path="/video/upload"/>
+            <mvc:mapping path="/videoaudio/upload"/>
+
+            <mvc:mapping path="/user/login"/>
+
+            <mvc:mapping path="/helmetqr/**"/>
+            <mvc:mapping path="/serviceqr/**"/>
+
+            <mvc:mapping path="/ty/**"/>
+            <mvc:mapping path="/alipay/**"/>
+            <mvc:mapping path="/svc/**"/>
+            <mvc:mapping path="/collaborate/**"/>
+
+            <mvc:mapping path="/contact/**"/>
+            <mvc:mapping path="/workorder/**"/>
+            <mvc:mapping path="/app/**"/>
+
+            <!-- 头盔操作日志 -->
+            <mvc:mapping path="/operalog/**"/>
+            <mvc:mapping path="/device/ledger/helmet/add"/>
+            <mvc:mapping path="/device/ledger/logout"/>
+            <mvc:mapping path="/device/helmet/get/neUser"/>
+            <mvc:mapping path="/device/helmet/getBlueBoxMac"/>
+            <mvc:mapping path="/device/helmet/pubHelmetMessage"/>
+
+            <!--手机登陆-->
+            <mvc:mapping path="/common/app/login"/>
+
+            <!--头盔统一接口地址-->
+            <mvc:mapping path="/aihelmet/**"/>
+            <ref bean="partnerSignatureInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/typartdata/**"/>
+            <ref bean="mockTianYuanUserInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/ty/**"/>
+            <mvc:mapping path="/typartdata/**"/>
+            <mvc:mapping path="/alipay/**"/>
+            <mvc:mapping path="/svc/**"/>
+            <ref bean="tianYuanUserInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/workorder/**"/>
+            <mvc:mapping path="/contact/**"/>
+            <!--<mvc:mapping path="/device/**"/>-->
+            <mvc:mapping path="/app/**"/>
+            <ref bean="tianyiUserInterceptor"/>
+        </mvc:interceptor>
+
+
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/workorder/**"/>-->
+            <!--<mvc:mapping path="/contact/app/**"/>-->
+            <!--<mvc:exclude-mapping path="/workorder/hm/**"/>-->
+            <!--<mvc:exclude-mapping path="/workorder/work/recv"/>-->
+            <!--<ref bean="tianyiAppInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+
+        <mvc:interceptor>
+            <mvc:mapping path="/svc/**"/>
+            <ref bean="svcTaskMsgRefreshInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/apk/**"/>
+            <mvc:mapping path="/neteasevideo/**"/>
+            <mvc:mapping path="/tianyiuser/**"/>
+            <mvc:mapping path="/image/machinecode/**"/>
+            <mvc:mapping path="/video/machinecode/**"/>
+            <mvc:mapping path="/tag/delete/**"/>
+            <mvc:mapping path="/tag/deletegroup/**"/>
+            <mvc:mapping path="/kmx/**"/>
+            <mvc:mapping path="/neteaseuser/viewPassword"/>
+            <mvc:mapping path="/neteaseuser/changePassword"/>
+            <!--<mvc:mapping path="/workordermanage/**"/>-->
+            <mvc:mapping path="/workorderstrategy/**"/>
+            <mvc:mapping path="/videoexcel/**"/>
+            <!--<mvc:mapping path="/device/**"/>-->
+
+            <ref bean="tianyiAdminUserInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/service/**"/>
+            <mvc:mapping path="/alipayquery/**"/>
+            <ref bean="sceneQueryInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/file/upload"/>
+            <mvc:mapping path="/video/upload"/>
+            <ref bean="operaLogInterceptor"/>
+        </mvc:interceptor>
+
+    </mvc:interceptors>
+
+</beans>

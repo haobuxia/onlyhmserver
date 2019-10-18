@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.VideoMessageDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.VideoMessage">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="videoId" property="videoId" jdbcType="INTEGER"/>
+        <result column="routingKey" property="routingKey" jdbcType="VARCHAR"/>
+        <result column="orderId" property="orderId" jdbcType="VARCHAR"/>
+        <result column="deviceNumber" property="deviceNumber" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,videoId,routingKey,orderId,deviceNumber,createTime
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 videoId,routingKey,orderId,deviceNumber,createTime
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id != null and id > 0 ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="videoId != null and videoId > 0 ">
+                and videoId = #{videoId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.VideoMessage" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_video_message (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{videoId},#{routingKey},#{orderId},#{deviceNumber},#{createTime}
+        )
+    </insert>
+
+</mapper>

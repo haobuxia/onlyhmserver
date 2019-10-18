@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.scene.VideoActionDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.scene.VideoAction">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="videoId" property="videoId" jdbcType="INTEGER"/>
+        <result column="tyboxImei" property="tyboxImei" jdbcType="VARCHAR"/>
+        <result column="videoTime" property="videoTime" jdbcType="TIMESTAMP"/>
+        <result column="autoSpeedDown" property="autoSpeedDown" jdbcType="INTEGER"/>
+        <result column="swingArmRise" property="swingArmRise" jdbcType="INTEGER"/>
+        <result column="swingArmFall" property="swingArmFall" jdbcType="INTEGER"/>
+        <result column="dipperDigger" property="dipperDigger" jdbcType="INTEGER"/>
+        <result column="dipperDigger2" property="dipperDigger2" jdbcType="INTEGER"/>
+        <result column="dipperUnload" property="dipperUnload" jdbcType="INTEGER"/>
+        <result column="bucketDigger" property="bucketDigger" jdbcType="INTEGER"/>
+        <result column="bucketUnload" property="bucketUnload" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,videoId,tyboxImei,videoTime,autoSpeedDown,swingArmRise,swingArmFall,dipperDigger,dipperDigger2,dipperUnload,bucketDigger,bucketUnload
+	</sql>
+
+    <sql id="Base_Column_List_NoId">
+		 videoId,tyboxImei,videoTime,autoSpeedDown,swingArmRise,swingArmFall,dipperDigger,dipperDigger2,dipperUnload,bucketDigger,bucketUnload
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id != null and id > 0 ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="videoId != null and videoId > 0 ">
+                and videoId = #{videoId,jdbcType=INTEGER}
+            </if>
+            <if test="tyboxImei != null and tyboxImei != '' ">
+                and tyboxImei = #{tyboxImei,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.scene.VideoAction" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_video_action (
+          <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+          #{videoId},#{tyboxImei},#{videoTime},#{autoSpeedDown},#{swingArmRise},#{swingArmFall},#{dipperDigger},#{dipperDigger2},#{dipperUnload},#{bucketDigger},#{bucketUnload}
+        )
+    </insert>
+
+    <select id="selectByVideoId" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_video_action
+        where videoId = #{videoId}
+    </select>
+
+    <update id="updateByVideoId" parameterType="com.tianyi.helmet.server.entity.scene.VideoAction">
+        update t_video_action
+           set autoSpeedDown = #{autoSpeedDown},
+                swingArmRise=#{swingArmRise},
+                swingArmFall=#{swingArmFall},
+                dipperDigger=#{dipperDigger},
+                dipperDigger2=#{dipperDigger2},
+                dipperUnload=#{dipperUnload},
+                bucketDigger=#{bucketDigger},
+                bucketUnload=#{bucketUnload}
+        where videoId = #{videoId}
+    </update>
+
+    <delete id="deleteByVideoId" parameterType="int">
+		  delete from t_video_action where videoId = #{videoId}
+	</delete>
+</mapper>

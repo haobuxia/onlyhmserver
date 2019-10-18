@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.HelmetConfigDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.HelmetConfigInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+        <result column="pid" property="pid" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="config0" property="config0" jdbcType="VARCHAR" />
+		<result column="config1" property="config1" jdbcType="VARCHAR" />
+		<result column="config2" property="config2" jdbcType="VARCHAR" />
+		<result column="config3" property="config3" jdbcType="VARCHAR" />
+		<result column="config4" property="config4" jdbcType="VARCHAR" />
+		<result column="config5" property="config5" jdbcType="VARCHAR" />
+		<result column="config6" property="config6" jdbcType="VARCHAR" />
+		<result column="config7" property="config7" jdbcType="VARCHAR" />
+		<result column="config8" property="config8" jdbcType="VARCHAR" />
+		<result column="config9" property="config9" jdbcType="VARCHAR" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, pid,status,name,config0,config1,config2,config3,config4,config5,config6,config7,config8,config9,uid
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		pid,status,name,config0,config1,config2,config3,config4,config5,config6,config7,config8,config9,uid
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="pid != null and pid != ''">
+				and pid = #{pid,jdbcType=INTEGER}
+			</if>
+			<if test="uid != null and uid != ''">
+				and uid = #{uid,jdbcType=INTEGER}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.HelmetConfigInfo" useGeneratedKeys="true" keyProperty="id">
+		insert IGNORE  into t_helmetconfig (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{pid},#{status},#{name},#{config0},#{config1},#{config2},#{config3},#{config4},#{config5},#{config6},#{config7},#{config8},#{config9},#{uid}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_helmetconfig
+		<include refid="conditions"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_helmetconfig
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_helmetconfig
+		 where id = #{id}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		  delete from t_helmetconfig where id = #{id}
+	</delete>
+
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.client.HelmetConfigInfo">
+        UPDATE t_helmetconfig
+        <set>
+            <if test="pid != null and pid != ''">
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+			<if test="uid != null and uid != ''">
+				uid = #{uid,jdbcType=INTEGER},
+			</if>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null and status != ''">
+				status = #{status,jdbcType=VARCHAR},
+            </if>
+			<if test="config0 != null and config0 != ''">
+				config0 = #{config0,jdbcType=VARCHAR},
+			</if>
+			<if test="config1 != null and config1 != ''">
+				config1 = #{config1,jdbcType=VARCHAR},
+			</if>
+			<if test="config2 != null and config2 != ''">
+				config2= #{config2,jdbcType=VARCHAR},
+			</if>
+			<if test="config3 != null and config3 != ''">
+				config3 = #{config3,jdbcType=VARCHAR},
+			</if>
+			<if test="config4 != null and config4 != ''">
+				config4 = #{config4,jdbcType=VARCHAR},
+			</if>
+			<if test="config5 != null and config5 != ''">
+				config5 = #{config5,jdbcType=VARCHAR},
+			</if>
+			<if test="config6 != null and config6 != ''">
+				config6 = #{config6,jdbcType=VARCHAR},
+			</if>
+			<if test="config7 != null and config7 != ''">
+				config7 = #{config7,jdbcType=VARCHAR},
+			</if>
+			<if test="config8 != null and config8 != ''">
+				config8 = #{config8,jdbcType=VARCHAR},
+			</if>
+			<if test="config9 != null and config9 != ''">
+				config9 = #{config9,jdbcType=VARCHAR},
+			</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.HelmetOnlineStatusDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.HelmetOnlineStatus">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="clientId" property="clientId" jdbcType="VARCHAR" />
+        <result column="neUsername" property="neUsername" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="onlineTime" property="onlineTime" jdbcType="TIMESTAMP" />
+        <result column="offlineTime" property="offlineTime" jdbcType="TIMESTAMP" />
+        <result column="userName" property="userName" jdbcType="VARCHAR" />
+        <result column="userId" property="userId" jdbcType="INTEGER" />
+        <result column="uid" property="uid" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,createTime,clientId,neUsername,status,onlineTime,offlineTime,userId,userName,uid
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        createTime,clientId,neUsername,status,onlineTime,offlineTime,userId,userName,uid
+    </sql>
+    <sql id="tjconditions">
+        <where>
+            <if test="clientId != null and clientId != ''">
+                and clientId = #{clientId,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != ''">
+                and userId = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="uid != null and uid != ''">
+                and uid = #{uid,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceNumber != null and deviceNumber != '' ">
+                and exists(
+                  select 1 from t_device where t_helmetonlinestatus.clientId = t_device.deviceUUID and t_device.deviceNumber = #{deviceNumber,jdbcType=VARCHAR}
+                )
+            </if>
+            <if test="userName != null and userName != ''">
+                and userName  LIKE '%${userName}%'
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and onlineTime &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and onlineTime &lt;= #{endTime}
+            </if>
+            and status = 1 and userId is not null
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.HelmetOnlineStatus" useGeneratedKeys="true" keyProperty="id">
+        insert into t_helmetonlinestatus (
+          <include refid="Base_Column_List_NoId" />
+        )
+        values (
+          #{createTime},#{clientId},#{neUsername},#{status},#{onlineTime},#{offlineTime},#{userId},#{userName},#{uid}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.data.HelmetOnlineStatus">
+        UPDATE t_helmetonlinestatus SET
+        offlineTime = #{offlineTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByClientId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_helmetonlinestatus
+        WHERE clientId = #{clientId} and status = 0
+        order by onlineTime desc
+    </select>
+
+    <select id="getLoginTimes" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        userId,clientId,min(onlineTime) as loginDate, count(*) as loginNum,sum(TIMESTAMPDIFF(SECOND, onlineTime, offlineTime)) loginSeconds
+        FROM t_helmetonlinestatus
+        <include refid="tjconditions" />
+        group by userId,clientId
+        order by userId asc
+    </select>
+
+    <select id="getShootTimes" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        userId,clientId,min(createTime) as loginDate, count(*) as loginNum,sum(seconds) loginSeconds
+        FROM t_video
+        where 1=1 and userId is not null
+        <if test="clientId != null and clientId != ''">
+            and clientId = #{clientId,jdbcType=VARCHAR}
+        </if>
+        <if test="deviceNumber != null and deviceNumber != '' ">
+            and exists(
+            select 1 from t_device where t_video.clientId = t_device.deviceUUID and t_device.deviceNumber = #{deviceNumber,jdbcType=VARCHAR}
+            )
+        </if>
+        <if test="userName != null and userName != ''">
+            and exists(
+            select 1 from t_user where t_video.userId = t_user.id and t_user.name LIKE '%${userName}%'
+            )
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and createTime &lt;= #{endTime}
+        </if>
+        group by userId,clientId
+        order by userId asc
+    </select>
+
+    <select id="getLoginTimesByDay" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        userId,clientId,date(onlineTime) as loginDate, count(*) as loginNum,sum(TIMESTAMPDIFF(SECOND, onlineTime, offlineTime)) loginSeconds
+        FROM t_helmetonlinestatus
+        <include refid="tjconditions" />
+        group by userId,clientId,date(onlineTime)
+        order by userId asc
+    </select>
+
+    <select id="getShootTimesByDay" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        userId,clientId,date(createTime) as loginDate, count(*) as loginNum,sum(seconds) loginSeconds
+        FROM t_video
+        where 1=1 and userId is not null
+        <if test="clientId != null and clientId != ''">
+            and clientId = #{clientId,jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null and userId != ''">
+            and userId = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and createTime &lt;= #{endTime}
+        </if>
+        group by userId,clientId,date(createTime)
+        order by userId asc
+    </select>
+
+    <select id="getShootTimesByArea" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        u.department,v.userId,min(v.createTime) as loginDate, count(v.id) as loginNum,sum(v.seconds) loginSeconds
+        FROM t_video v join t_user u on v.userid=u.id
+        where 1=1
+        <if test="clientId != null and clientId != ''">
+            and v.clientId = #{clientId,jdbcType=VARCHAR}
+        </if>
+        <if test="deviceNumber != null and deviceNumber != '' ">
+            and exists(
+            select 1 from t_device where v.clientId = t_device.deviceUUID and t_device.deviceNumber = #{deviceNumber,jdbcType=VARCHAR}
+            )
+        </if>
+        <if test="userName != null and userName != ''">
+            and u.name LIKE '%${userName}%'
+        </if>
+        <if test="department != null and department != ''">
+            and u.department = #{department,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and v.createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and v.createTime &lt;= #{endTime}
+        </if>
+        group by u.department,v.userId
+        order by u.department asc,sum(v.seconds) desc,v.userId asc
+    </select>
+    <select id="getShootTimeListByUser" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        v.id,v.userId,v.createTime as loginDate,v.seconds loginSeconds
+        FROM t_video v join t_user u on v.userid=u.id
+        where 1=1
+        <if test="clientId != null and clientId != ''">
+            and v.clientId = #{clientId,jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null and userId != ''">
+            and v.userId = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and v.createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and v.createTime &lt;= #{endTime}
+        </if>
+        order by v.createTime asc
+    </select>
+    <select id="getShootTimeListByUserByDay" parameterType="map" resultType="java.util.HashMap">
+        SELECT
+        v.userId,date(v.createTime) as loginDate, count(v.id) as loginNum,sum(v.seconds) loginSeconds
+        FROM t_video v join t_user u on v.userid=u.id
+        where 1=1
+        <if test="clientId != null and clientId != ''">
+            and v.clientId = #{clientId,jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null and userId != ''">
+            and v.userId = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and v.createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and v.createTime &lt;= #{endTime}
+        </if>
+        group by v.userId,date(v.createTime)
+        order by date(v.createTime) asc
+    </select>
+
+    <select id="getShootNumListByTag" parameterType="map" resultType="java.util.HashMap">
+        SELECT u.id as userId, min(u.department) as department, min(u.name) as userName,t.id as tagid,t.tagname,count(v.id) as shootnum
+        FROM t_tag_res r
+        join t_video v on r.resid=v.id and r.restype=1
+        join t_tag t on r.tagid=t.id
+        join t_user u on v.userid=u.id
+        <if test="department != null and department != ''">
+            and u.department = #{department,jdbcType=VARCHAR}
+        </if>
+        <if test="userName != null and userName != ''">
+            and u.name LIKE '%${userName}%'
+        </if>
+        <if test="organisation != null and organisation != ''">
+            and u.organisation = #{organisation,jdbcType=INTEGER}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and v.createTime &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and v.createTime &lt;= #{endTime}
+        </if>
+        group by u.id,t.id,t.tagname
+        order by department asc,u.id asc,t.id asc
+    </select>
+
+    <select id="getOnlineUser" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List_NoId"></include>
+        FROM t_helmetonlinestatus
+        <where>
+            AND offlineTime IS NULL AND neusername IS NOT NULL AND userid IS NOT NULL AND userid != -1
+        </where>
+    </select>
+
+    <update id="updateByClientId" parameterType="map">
+        UPDATE t_helmetonlinestatus
+        <set>
+            neUsername=#{neUsername,jdbcType=VARCHAR},
+            userid=#{userId,jdbcType=INTEGER},
+            userName=#{userName,jdbcType=VARCHAR},
+        </set>
+        <where>
+            clientId=#{clientId,jdbcType=VARCHAR} AND status=0
+        </where>
+    </update>
+    <select id="countBy" parameterType="map" resultType="int">
+        SELECT COUNT(id)
+        FROM t_helmetonlinestatus
+        <include refid="tjconditions" />
+    </select>
+</mapper>

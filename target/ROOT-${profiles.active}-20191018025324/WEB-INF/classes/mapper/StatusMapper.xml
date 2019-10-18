@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.dictionary.StatusDao">
+
+    <select id="selectStatus" resultType="map">
+        SELECT statusId,status FROM t_device_status
+        <where>
+            <if test="statusId != null and statusId != ''">
+                statusId = #{statusId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,1 @@
+ALTER TABLE hmserver.t_gpsaction MODIFY actionVal VARCHAR(8);

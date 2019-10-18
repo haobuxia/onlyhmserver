@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.device.TmnlDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.device.TmnlInfo">
+        <id column="Tmnl_ID" property="tmnlID" jdbcType="VARCHAR"/>
+        <result column="Tmnl_ProductNo" property="tmnlProductNo" jdbcType="VARCHAR"/>
+        <result column="Tmnl_SatelliteType" property="tmnlSatelliteType" jdbcType="VARCHAR"/>
+        <result column="Tmnl_SatelliteNo" property="tmnlSatelliteNo" jdbcType="VARCHAR"/>
+        <result column="Tmnl_IMEI" property="tmnlIMEI" jdbcType="VARCHAR"/>
+        <result column="Tmnl_SoftwareEdition" property="tmnlSoftwareEdition" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		Tmnl_ID,Tmnl_ProductNo,Tmnl_SatelliteType,Tmnl_SatelliteNo,Tmnl_IMEI,STATUS,Tmnl_SoftwareEdition
+	</sql>
+    <sql id="Base_Column_List_NoId">
+        Tmnl_ProductNo,Tmnl_SatelliteType,Tmnl_SatelliteNo,Tmnl_IMEI,STATUS,Tmnl_SoftwareEdition
+    </sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="tmnlID != null and tmnlID != ''">
+                and Tmnl_ID = #{tmnlID}
+            </if>
+            <if test="tmnlIMEI != null and tmnlIMEI != ''">
+                and Tmnl_IMEI = #{tmnlIMEI}
+            </if>
+            <if test="status != null">
+                and ifnull(status,0) = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <select id="select" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from TmnlInfo
+        <include refid="conditions"/>
+        order BY
+        Tmnl_ID ASC
+    </select>
+    <update id="update" parameterType="com.tianyi.helmet.server.entity.device.TmnlInfo">
+        update TmnlInfo
+        set status = #{status}
+        where Tmnl_ID = #{tmnlID}
+    </update>
+</mapper>

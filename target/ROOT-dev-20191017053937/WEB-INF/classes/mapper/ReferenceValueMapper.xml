@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.ReferenceValueDao">
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.ReferenceValue">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="model" property="model" jdbcType="VARCHAR" />
+        <result column="action" property="action" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="stateUp" property="stateUp" jdbcType="INTEGER" />
+        <result column="stateLower" property="stateLower" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, createTime, model, action, state, stateUp, stateLower
+    </sql>
+    <sql id="Base_Column_List_NoId_NoCreateTime">
+        model, action, state, stateUp, stateLower
+    </sql>
+    <sql id="conditions">
+      <where>
+
+      </where>
+    </sql>
+
+    <select id="selectByModel" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List_NoId_NoCreateTime" />
+        from t_reference_value
+        where model = #{model}
+        order by action
+    </select>
+</mapper>

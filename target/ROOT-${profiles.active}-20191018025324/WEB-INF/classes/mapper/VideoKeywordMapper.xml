@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.VideoKeywordDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.VideoKeyword">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="videoId" property="videoId" jdbcType="INTEGER"/>
+        <result column="keywordId" property="keywordId" jdbcType="INTEGER"/>
+        <result column="timeseconds" property="timeseconds" jdbcType="INTEGER"/>
+        <result column="perspeech" property="perspeech" jdbcType="VARCHAR"/>
+        <result column="keywordName" property="keywordName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="GroupMap" type="com.tianyi.helmet.server.vo.DoubleVo">
+        <result column="keywordId" property="key" jdbcType="INTEGER"/>
+        <result column="cnt" property="val" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id,videoId,keywordId,timeseconds,perspeech,keywordName
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 videoId,keywordId,timeseconds,perspeech,keywordName
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id != null and id > 0 ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="videoId != null and videoId > 0 ">
+                and videoId = #{videoId,jdbcType=INTEGER}
+            </if>
+            <if test="keywordId != null and keywordId > 0 ">
+                and keywordId = #{keywordId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.VideoKeyword" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_video_keyword (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{videoId},#{keywordId},#{timeseconds},#{perspeech},#{keywordName}
+        )
+    </insert>
+    <update id="updateKeyWord" parameterType="com.tianyi.helmet.server.entity.file.VideoKeyword">
+        UPDATE t_video_keyword SET
+        keywordId = #{keywordId,jdbcType=INTEGER},
+        keywordName = #{keywordName,jdbcType=VARCHAR}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByVideoId" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_video_keyword
+        where videoId = #{videoId}
+    </select>
+
+    <select id="selectByKeywordId" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_video_keyword
+        where keywordId = #{keywordId}
+        order by id desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countByKeywordId" parameterType="int" resultType="int">
+       select count(*)
+         from t_video_keyword
+        where keywordId = #{keywordId}
+    </select>
+
+    <select id="groupByKeyword" parameterType="map" resultMap="GroupMap">
+        select keywordId,count(1) as cnt
+        from t_video_keyword
+        <include refid="conditions"/>
+        group by keywordId
+        order by cnt desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="selectKeywordCount" parameterType="map" resultType="int">
+        select count(distinct keywordId)
+        from t_video_keyword
+        <include refid="conditions"/>
+    </select>
+
+
+    <delete id="deleteByVideoId" parameterType="int">
+		  delete from t_video_keyword where videoId = #{videoId}
+	</delete>
+
+    <delete id="deleteByKeywordId" parameterType="int">
+          delete from t_video_keyword where keywordId = #{keywordId}
+    </delete>
+
+    <delete id="deleteByVideoIdKeywordId" parameterType="map">
+          delete from t_video_keyword where videoId = #{videoId} and keywordId = #{keywordId}
+    </delete>
+
+</mapper>

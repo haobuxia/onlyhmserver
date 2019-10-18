@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.power.RoleMenuDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.power.RoleMenu">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="roleId" property="roleId" jdbcType="INTEGER" />
+        <result column="menuId" property="menuId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,roleId,menuId
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        roleId,menuId
+    </sql>
+    <sql id="conditions">
+        <where>
+            <if test="roleId != null">
+                and roleId = #{roleId,jdbcType=INTEGER}
+            </if>
+            <if test="menuId != null">
+                and menuId = #{menuId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.power.RoleMenu" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_rolemenu (
+        <include refid="Base_Column_List_NoId" />
+        )
+        VALUES (
+        #{roleId},#{menuId}
+        )
+    </insert>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM t_rolemenu
+        WHERE id = #{id}
+    </delete>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_rolemenu
+    </select>
+
+    <select id="listByNoPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_rolemenu
+        <include refid="conditions" />
+        ORDER BY id
+    </select>
+
+</mapper>

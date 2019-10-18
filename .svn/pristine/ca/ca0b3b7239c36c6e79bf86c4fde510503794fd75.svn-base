@@ -1,0 +1,17 @@
+driver=com.mysql.jdbc.Driver
+initialSize=1
+maxActive=20
+maxIdle=5
+minIdle=1
+maxWait=60000
+username=root
+validationQuery=select 1
+
+#url=jdbc:mysql://localhost:13306/hmserver?zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=true&useUnicode=true&characterEncoding=UTF-8
+#password=root
+
+url=jdbc:mysql://192.168.22.39:3306/hmserver_new?zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=true&useUnicode=true&characterEncoding=UTF-8
+password=tianyikeji2017
+
+#url=jdbc:mysql://192.168.111.21:3306/hmserver?zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=true&useUnicode=true&characterEncoding=UTF-8
+#password=tianyikeji2017

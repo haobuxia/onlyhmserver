@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.VideoDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.Video">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="uploadTime" property="uploadTime" jdbcType="TIMESTAMP"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="clientId" property="clientId" jdbcType="VARCHAR"/>
+        <result column="neUserName" property="neUserName" jdbcType="VARCHAR" />
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="seconds" property="seconds" jdbcType="BIGINT"/>
+        <result column="sizeKb" property="sizeKb" jdbcType="BIGINT"/>
+        <result column="videoName" property="fileName" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="thumbOssPath" property="thumbOssPath" jdbcType="VARCHAR"/>
+        <result column="picOssPath" property="picOssPath" jdbcType="VARCHAR"/>
+        <result column="ossPath" property="ossPath" jdbcType="VARCHAR"/>
+        <result column="viewCount" property="viewCount" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="src" property="src" jdbcType="VARCHAR"/>
+        <result column="hasGpsData" property="hasGpsData" jdbcType="INTEGER"/>
+        <result column="imei" property="imei" jdbcType="VARCHAR"/>
+        <result column="trackVideoOssPath" property="trackVideoOssPath" jdbcType="VARCHAR"/>
+        <result column="machineCode" property="machineCode" jdbcType="VARCHAR"/>
+        <result column="lon" property="lon" jdbcType="FLOAT"/>
+        <result column="lat" property="lat" jdbcType="FLOAT"/>
+        <result column="siteId" property="siteId" jdbcType="INTEGER"/>
+        <result column="videoType" property="videoType" jdbcType="VARCHAR"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="caller" property="caller" jdbcType="VARCHAR"/>
+        <result column="called" property="called" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="GroupMap" type="com.tianyi.helmet.server.vo.DoubleVo">
+        <result column="groupKey" property="key" jdbcType="VARCHAR"/>
+        <result column="cnt" property="val" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="IntGroupMap" type="com.tianyi.helmet.server.vo.DoubleVo">
+        <result column="groupKey" property="key" jdbcType="INTEGER"/>
+        <result column="cnt" property="val" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="TripleMap" type="com.tianyi.helmet.server.vo.TripleVo">
+        <result column="lon" property="one" jdbcType="FLOAT"/>
+        <result column="lat" property="two" jdbcType="FLOAT"/>
+        <result column="cnt" property="three" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="join">
+        <if test="keyword != null and keyword != ''">
+            LEFT JOIN t_device ON t_device.deviceUUID = t_video.clientId
+            LEFT JOIN t_video_order on t_video.id=t_video_order.videoid
+        </if>
+        <if test="(sceneSelect != null and sceneSelect != '') or (brandSelect != null and brandSelect != '') or (machineTypeSelect != null and machineTypeSelect != '') or (machineModelSelect != null and machineModelSelect != '') or (machineNumber != null and machineNumber != '') or (orderNo != null and orderNo != '') or (deviceNumber != null and deviceNumber != '') ">
+            LEFT JOIN t_video_order on t_video.id=t_video_order.videoid
+        </if>
+    </sql>
+    <sql id="Base_Column_List">
+		t_video.id, t_video.uploadTime,t_video.createTime,t_video.clientId,t_video.neUserName,t_video.userId,t_video.seconds, t_video.sizeKb, t_video.videoName, t_video.description, t_video.thumbOssPath,t_video.picOssPath, t_video.ossPath, t_video.viewCount, t_video.state,t_video.src,t_video.hasGpsData,t_video.imei,t_video.trackVideoOssPath,t_video.machineCode,t_video.lon,t_video.lat,t_video.siteId,t_video.videoType,t_video.orderNo,t_video.caller,t_video.called,t_video.source
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 t_video.uploadTime,t_video.createTime,t_video.clientId,t_video.neUserName,t_video.userId,t_video.seconds, t_video.sizeKb, t_video.videoName, t_video.description, t_video.thumbOssPath,t_video.picOssPath, t_video.ossPath, t_video.viewCount, t_video.state,t_video.src,t_video.hasGpsData,t_video.imei,t_video.trackVideoOssPath,t_video.machineCode,t_video.lon,t_video.lat,t_video.siteId,t_video.videoType,t_video.orderNo,t_video.caller,t_video.called,t_video.source
+	</sql>
+    <sql id="conditions">
+        <where>
+            <if test="clientId != null and clientId != '' ">
+                and t_video.clientId = #{clientId,jdbcType=VARCHAR}
+            </if>
+            <if test="clientid != null and clientid != '' ">
+                and t_video.clientId = #{clientid,jdbcType=VARCHAR}
+            </if>
+            <if test="neUserName != null and neUserName != '' ">
+                and neUserName = #{neUserName,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and t_video.userId = #{userId,jdbcType=VARCHAR}
+            </if>
+            <if test="siteId != null and siteId > 0 ">
+                and t_video.siteId = #{siteId,jdbcType=INTEGER}
+            </if>
+            <if test="siteid != null and siteid > 0 ">
+                and t_video.siteId = #{siteid,jdbcType=INTEGER}
+            </if>
+            <if test="videoType != null and videoType != '' ">
+                and t_video.videoType = #{videoType,jdbcType=VARCHAR}
+            </if>
+            <if test="workId != null and workId != '' ">
+                and t_video.orderNo = #{workId,jdbcType=VARCHAR}
+            </if>
+            <if test="source != null and source != '' ">
+                and t_video.source = #{source,jdbcType=VARCHAR}
+            </if>
+            <if test="tyaccount != null and tyaccount != '' ">
+                and exists (select 1 from t_user where t_video.userid = t_user.id and t_user.tianyuanaccount =
+                #{tyaccount} )
+            </if>
+            <if test="affiliationId != null ">
+                and exists (select 1 from t_device where t_video.clientId = t_device.deviceUUID and t_device.affiliationId =
+                #{affiliationId} )
+            </if>
+            <if test="salerId != null ">
+                and exists (select 1 from t_device where t_video.clientId = t_device.deviceUUID and t_device.salerId =
+                #{salerId} )
+            </if>
+            <if test="deviceNo != null ">
+                and exists (select 1 from t_device where t_video.clientId = t_device.deviceUUID and t_video.orderNo is null and t_device.deviceNumber =
+                #{deviceNo} )
+            </if>
+            <if test="src != null and src != '' ">
+                and t_video.src = #{src,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null and state >= 0 ">
+                and t_video.state = #{state}
+            </if>
+            <if test="state1 != null ">
+                and t_video.state &gt;= #{state1}
+            </if>
+            <if test="state2 != null ">
+                and t_video.state &lt;= #{state2}
+            </if>
+            <if test="hasGpsData != null">
+                and t_video.hasGpsData = #{hasGpsData}
+            </if>
+            <if test="hasGeo != null">
+                and t_video.lon > 0
+                and t_video.lat > 0
+            </if>
+            <if test="hasTag != null">
+                and EXISTS (select 1 from t_tag_res where t_video.id = t_tag_res.res_id and t_tag_res.resType = 1 )
+            </if>
+            <if test="groupImei != null and groupImei != '' ">
+                and t_video.imei is not null and imei != ''
+            </if>
+            <if test="imei != null and imei != '' ">
+                and t_video.imei = #{imei}
+            </if>
+            <if test="groupMachineCode != null and groupMachineCode != '' ">
+                and t_video.machineCode is not null and machineCode != ''
+            </if>
+            <if test="groupSiteId != null and groupSiteId != '' ">
+                and t_video.siteId is not null and siteId > 0
+            </if>
+            <if test="machinecode != null and machinecode != '' ">
+                and t_video.machineCode = #{machinecode}
+            </if>
+            <if test=" (tag != null and tag != '') or (groupId != null and groupId > 0) ">
+                <choose>
+                        <when test=" tag != null and tag > 0 and groupId != null and groupId > 0 ">
+                            and exists(
+                            select 1 from t_tag_res,t_tag
+                            where t_tag_res.tagId = t_tag.id and t_tag_res.restype = 1
+                            and t_tag_res.resId = t_video.id and t_tag_res.tagId = #{tag}
+                            and t_tag.groupId = #{groupId}
+                            )
+                        </when>
+                        <when test="tag != null and tag > 0 "> <!-- tag means tagId -->
+                            and exists(
+                            select 1 from t_tag_res
+                            where t_tag_res.restype = 1
+                            and t_tag_res.resId = t_video.id
+                            and t_tag_res.tagId = #{tag}
+                            )
+                        </when>
+                        <when test="groupId != null and groupId > 0 ">
+                            and exists(
+                            select 1 from t_tag_res,t_tag
+                            where t_tag_res.tagId = t_tag.id and t_tag_res.restype = 1
+                            and t_tag_res.resId = t_video.id and t_tag.groupId = #{groupId}
+                            )
+                        </when>
+                </choose>
+            </if>
+            <if test="keywordId != null and keywordId > 0 ">
+                and exists(
+                   select 1 from t_video_keyword where t_video_keyword.videoId = t_video.id and t_video_keyword.keywordId = #{keywordId}
+                )
+            </if>
+            <if test="keyword != null and keyword != ''">
+                and (
+                t_video.id LIKE '%${keyword}%' or
+                t_video.videoName LIKE '%${keyword}%' or
+                t_video.description LIKE '%${keyword}%' or
+                t_video.imei LIKE '%${keyword}%' or
+                t_video.machineCode LIKE '%${keyword}%' or
+                t_video.videoType LIKE '%${keyword}%' or
+                t_video.orderNo LIKE '%${keyword}%' or
+                t_video.clientId LIKE '%${keyword}%'
+                )
+            </if>
+            <if test="keyword1 != null and  keyword1 != ''">
+                and exists(
+                  select 1 from t_video_keyword where t_video_keyword.videoId = t_video.id and t_video_keyword.perspeech like '%${keyword1}%'
+                )
+            </if>
+            <if test="trackVideoOssPath != null and trackVideoOssPath != '' ">
+                and t_video.trackVideoOssPath = #{trackVideoOssPath}
+            </if>
+            <if test="createTime != null ">
+                and t_video.createTime = #{createTime}
+            </if>
+            <if test="createTimeCross != null and createTimeCross != '' ">
+                and (
+                t_video.createTime BETWEEN #{crossTime1} and #{crossTime2}
+                  OR
+                   DATE_ADD(t_video.createtime,INTERVAL t_video.seconds SECOND) BETWEEN #{crossTime1} and #{crossTime2}
+                  OR
+                 ( t_video.createTime &lt;= #{crossTime1} and  DATE_ADD(t_video.createtime,INTERVAL t_video.seconds SECOND) >= #{crossTime2})
+                )
+            </if>
+            <if test="timeLongBegin != null and timeLongBegin != '' and timeLongEnd != null and timeLongEnd != ''">
+                and t_video.seconds BETWEEN #{timeLongBegin} and #{timeLongEnd}
+            </if>
+            <if test="createTime1 != null ">
+                and t_video.createTime &gt;= #{createTime1}
+            </if>
+            <if test="createTime2 != null ">
+                and t_video.createTime &lt;= #{createTime2}
+            </if>
+            <if test="uploadTime != null ">
+                and t_video.uploadTime = #{uploadTime}
+            </if>
+            <if test="uploadTime1 != null ">
+                and t_video.uploadTime &gt;= #{uploadTime1}
+            </if>
+            <if test="uploadTime2 != null ">
+                and t_video.uploadTime &lt;= #{uploadTime2}
+            </if>
+
+            <if test="userName != null and userName != ''">
+                and exists(
+                select 1 from t_user where t_video.userId = t_user.id and t_user.name LIKE '%${userName}%'
+                )
+            </if>
+            <if test="deviceNumber != null and deviceNumber != '' ">
+                and t_video_order.deviceid = #{deviceNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="sceneSelect != null and sceneSelect != '' ">
+                and t_video_order.workpattern = #{sceneSelect,jdbcType=VARCHAR}
+            </if>
+            <if test="brandSelect != null and brandSelect != '' ">
+                and t_video_order.devicebrand = #{brandSelect,jdbcType=VARCHAR}
+            </if>
+            <if test="machineTypeSelect != null and machineTypeSelect != '' ">
+                and t_video_order.devicetype = #{machineTypeSelect,jdbcType=VARCHAR}
+            </if>
+            <if test="machineModelSelect != null and machineModelSelect != '' ">
+                and t_video_order.devicemodel = #{machineModelSelect,jdbcType=VARCHAR}
+            </if>
+            <if test="machineNumber != null and machineNumber != '' ">
+                and t_video_order.deviceid = #{machineNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNo != null and orderNo != '' ">
+                and t_video_order.workoid = #{orderNo,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="updateClause">
+        <set>
+            <if test="clientId != null and clientId != '' ">
+                clientId = #{clientId,jdbcType=VARCHAR},
+            </if>
+            <if test="neUserName != null and neUserName != '' ">
+                neUserName = #{neUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null and userId != '' ">
+                userId = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="siteId != null and siteId > 0 ">
+                siteId = #{siteId,jdbcType=INTEGER},
+            </if>
+            <if test="seconds != null and seconds > 0 ">
+                seconds = #{seconds,jdbcType=INTEGER},
+            </if>
+            <if test="sizeKb != null and sizeKb > 0 ">
+                sizeKb = #{sizeKb,jdbcType=BIGINT},
+            </if>
+            <if test="thumbOssPath != null and thumbOssPath != '' ">
+                thumbOssPath = #{thumbOssPath,jdbcType=VARCHAR},
+            </if>
+            <if test="picOssPath != null and picOssPath != '' ">
+                picOssPath = #{picOssPath,jdbcType=VARCHAR},
+            </if>
+            <if test="ossPath != null and ossPath != '' ">
+                ossPath = #{ossPath,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null and state != '' ">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="hasGpsData != null">
+                hasGpsData = #{hasGpsData},
+            </if>
+            <if test="imei != null and imei != '' ">
+                imei = #{imei},
+            </if>
+            <if test="machineCode != null and machineCode != '' ">
+                machineCode = #{machineCode},
+            </if>
+            <if test="trackVideoOssPath != null and trackVideoOssPath != '' ">
+                trackVideoOssPath = #{trackVideoOssPath},
+            </if>
+            <if test="videoType != null and videoType != '' ">
+                videoType = #{videoType},
+            </if>
+            <if test="orderNo != null and orderNo != '' ">
+                orderNo = #{orderNo},
+            </if>
+        </set>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.Video" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_video (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{uploadTime},#{createTime},#{clientId},#{neUserName},#{userId},#{seconds},#{sizeKb},#{fileName},#{description},#{thumbOssPath},#{picOssPath},#{ossPath},#{viewCount},#{state},#{src},#{hasGpsData},#{imei},#{trackVideoOssPath},#{machineCode},#{lon},#{lat},#{siteId},#{videoType},#{orderNo},#{caller},#{called},#{source}
+        )
+    </insert>
+
+    <select id="listBy" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_video
+        <include refid="join"/>
+        <include refid="conditions"/>
+        order by t_video.uploadTime
+        <if test="orderBy == null || orderBy == 1 ">
+            desc
+        </if>
+        <include refid="core.page"/>
+    </select>
+
+    <select id="listByCreateTime" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_video
+        <include refid="join"/>
+        <include refid="conditions"/>
+        order by createTime DESC
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        select count(t_video.id)
+        from t_video
+        <include refid="join"/>
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_video
+        where id = #{id}
+    </select>
+
+    <select id="groupByHelmetImei" parameterType="map" resultMap="GroupMap">
+        SELECT t_video.clientId as groupKey,count(1) as cnt
+        from t_video
+        <include refid="join"/>
+        <include refid="conditions"/>
+        group by t_video.clientId
+        order by cnt desc
+        <include refid="core.page"/>
+    </select>
+
+    <!--需要修改-->
+    <select id="groupByNeUsername" parameterType="map" resultMap="GroupMap">
+        SELECT neUserName as groupKey,count(1) as cnt
+        from t_video v
+        <include refid="conditions"/>
+        group by neUserName
+        order by cnt desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="groupByTyBoxImei" parameterType="map" resultMap="GroupMap">
+        SELECT t_video.imei as groupKey,count(1) as cnt
+        from t_video
+        <include refid="join"/>
+        <include refid="conditions"/>
+        group by t_video.imei
+        order by cnt desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="groupByMachineCode" parameterType="map" resultMap="GroupMap">
+        SELECT t_video.machineCode as groupKey,count(1) as cnt
+        from t_video
+        <include refid="join"/>
+        <include refid="conditions"/>
+        group by t_video.machineCode
+        order by cnt desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="selectClientCount" resultType="int">
+		select count(distinct clientId)
+		from t_video
+	</select>
+
+    <select id="selectImeiCount" resultType="int">
+		select count(distinct imei)
+		from t_video
+		where imei is not null and imei != ''
+	</select>
+
+    <select id="selectMachineCodeCount" resultType="int">
+		select count(distinct machineCode)
+		from t_video
+		where machineCode is not null and machineCode != ''
+	</select>
+
+    <select id="groupBySiteId" parameterType="map" resultMap="IntGroupMap">
+        SELECT t_video.siteId as groupKey,count(1) as cnt
+        from t_video
+        <include refid="join"/>
+        <include refid="conditions"/>
+        group by t_video.siteId
+        order by cnt desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="selectSiteIdCount" resultType="int">
+		select count(distinct siteId)
+		from t_video
+		where siteId is not null and siteId > 0
+	</select>
+
+    <select id="selectGeoCount" resultMap="TripleMap">
+		SELECT round(lon,2) as lon ,round(lat,3) as lat,count(*) as cnt
+		  from t_video
+		  where lon >0 and lat > 0
+		group by round(lon,2),round(lat,3)
+	</select>
+
+    <select id="selectTagGeoData" resultType="com.tianyi.helmet.server.vo.GeoDataVo">
+		  SELECT a.lon,a.lat,a.id as resId,c.tagName
+		  	 from t_video a ,t_tag_res b, t_tag c
+		  	 where a.lon > 0
+		  	   and a.lat > 0
+		  	   and a.id = b.resId and b.resType = 1
+		  	   and b.tagId = c.id
+	</select>
+
+    <update id="updateSiteIdByGeo" parameterType="map">
+		update t_video
+		 set siteId = #{siteId}
+		where round(lon,2) = round(#{lon},2)
+		  and round(lat,3) = round(#{lat},3)
+		  and exists(
+		  	select 1 from t_tag_res where t_video.id = t_tag_res.resId and t_tag_res.resType = 1
+		  )
+	</update>
+
+    <update id="clearSiteId" parameterType="int">
+		update t_video set siteId = 0
+		where siteId = #{siteId}
+	</update>
+
+    <update id="increaseViewCount" parameterType="int">
+		update t_video
+		   set viewCount = viewCount + 1
+		  where id = #{id}
+	</update>
+
+    <update id="updateStateById" parameterType="map">
+		update t_video
+		set state = #{state}
+		where id = #{id}
+	</update>
+
+    <update id="updateHasGpsDataById" parameterType="map">
+		update t_video
+		set hasGpsData = #{hasGpsData},
+			imei = #{imei}
+		where id = #{id}
+	</update>
+
+    <update id="updateTrackVideoOssPathById" parameterType="map">
+        update t_video
+        <set>
+            <if test="trackVideoOssPath != null and trackVideoOssPath != '' ">
+                trackVideoOssPath = #{trackVideoOssPath},
+                state = 2
+            </if>
+            <if test="trackVideoOssPath == null || trackVideoOssPath == ''">
+                trackVideoOssPath = null,
+                state = 2
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateById" parameterType="com.tianyi.helmet.server.entity.file.Video">
+        update t_video
+        <include refid="updateClause"/>
+        where id = #{id}
+    </update>
+
+    <update id="updateMachineCodeById" parameterType="map">
+		update t_video
+		 set machineCode = #{machineCode}
+		where id = #{id}
+	</update>
+
+    <update id="updateLonLatById" parameterType="map">
+		update t_video
+		set lon = #{lon},lat = #{lat}
+		where id = #{id}
+	</update>
+
+    <update id="updateVideoTypeById" parameterType="map">
+        update t_video
+        set lon = #{lon},lat = #{lat}
+        where id = #{id}
+    </update>
+
+    <update id="updateThumbOssPathById" parameterType="map">
+		update t_video
+		set thumbOssPath = #{thumbOssPath}
+		where id = #{id}
+	</update>
+
+    <delete id="deleteById" parameterType="int">
+		  delete from t_video where id = #{id}
+	</delete>
+
+    <select id="listDoubles" parameterType="map" resultType="int">
+        SELECT min(id) id
+        FROM t_video
+        where state=2
+        group by clientid,createTime
+        having count(id) > 1
+    </select>
+</mapper>

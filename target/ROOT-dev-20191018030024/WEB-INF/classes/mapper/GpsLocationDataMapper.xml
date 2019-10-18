@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.GpsLocationDataDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.GpsLocationData">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="clientId" property="clientId" jdbcType="VARCHAR" />
+		<result column="imei" property="imei" jdbcType="TIMESTAMP" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="latns" property="latns" jdbcType="INTEGER" />
+		<result column="lat" property="lat" jdbcType="FLOAT" />
+		<result column="lonew" property="lonew" jdbcType="INTEGER" />
+		<result column="lon" property="lon" jdbcType="FLOAT" />
+		<result column="speed" property="speed" jdbcType="INTEGER" />
+		<result column="orient" property="orient" jdbcType="INTEGER" />
+		<result column="oldnew" property="oldnew" jdbcType="INTEGER" />
+		<result column="altPosNeg" property="altPosNeg" jdbcType="INTEGER" />
+		<result column="alt" property="alt" jdbcType="INTEGER" />
+		<result column="star" property="star" jdbcType="INTEGER" />
+		<result column="gpsTime" property="gpsTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="locationCountResultMap" type="com.tianyi.helmet.server.vo.TripleVo">
+		<result column="lon" property="one" jdbcType="FLOAT" />
+		<result column="lat" property="two" jdbcType="FLOAT" />
+		<result column="cnt" property="three" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, imei,createTime, clientId,latns,lat,lonew,lon,speed,orient,oldnew,altPosNeg,alt,star,gpsTime
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 imei,createTime, clientId,latns,lat,lonew,lon,speed,orient,oldnew,altPosNeg,alt,star,gpsTime
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="imei != null and imei != ''">
+				and imei = #{imei,jdbcType=VARCHAR}
+			</if>
+			<if test="clientId != null and clientId != '' ">
+				and clientId = #{clientId,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="year != null and year > 0">
+				and year(createTime) = #{year}
+			</if>
+			<if test="month != null and month > 0">
+				and month(createTime) = #{month}
+			</if>
+			<if test="day != null and day > 0">
+				and day(createTime) = #{day}
+			</if>
+			<if test="hour != null and hour > 0">
+				and hour(createTime) = #{hour}
+			</if>
+			<if test="minute != null and minute > 0">
+				and minute(createTime) = #{minute}
+			</if>
+			<if test="hasData != null and hasData == 1">
+				and (lat != 0 or lon != 0)
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.GpsLocationData" useGeneratedKeys="true" keyProperty="id">
+		insert into t_gpslocation (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{imei},#{createTime},#{clientId},#{latns},#{lat},#{lonew},#{lon},#{speed},#{orient},#{oldnew},#{altPosNeg},#{alt},#{star},#{gpsTime}
+		)
+	</insert>
+
+	<select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_gpslocation
+		<include refid="conditions"/>
+		order by createTime
+		<if test="order != null and order &gt; 0">
+			asc
+		</if>
+		<if test="order != null and order &lt; 0">
+			desc
+		</if>
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		select count(1)
+		from t_gpslocation
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectDateDataList" parameterType="map" resultType="int">
+		select DISTINCT ${dataType}(createTime) as distinctData
+		 from t_gpslocation
+		<include refid="conditions"/>
+		order by distinctData
+	</select>
+
+	<select id="selectLocationList" parameterType="map" resultMap="locationCountResultMap">
+		select ROUND(lon,2) as lon,ROUND(lat,3) as lat,count(1) as cnt
+		from t_gpslocation
+		<include refid="conditions"/>
+		group by ROUND(lon,4),ROUND(lat,4)
+	</select>
+</mapper>

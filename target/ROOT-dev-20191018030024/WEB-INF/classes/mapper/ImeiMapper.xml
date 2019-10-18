@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.ImeiDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.Imei">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="imei" property="imei" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, imei,createTime
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 imei,createTime
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="imei != null and imei != ''">
+				and imei = #{imei,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.Imei" useGeneratedKeys="true" keyProperty="id">
+		insert IGNORE  into t_imei (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{imei},#{createTime}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_imei
+		<include refid="conditions"/>
+		order by createTime desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_imei
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_imei
+		 where id = #{id}
+	</select>
+
+	<select id="selectByImei" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_imei
+		where imei = #{imei}
+	</select>
+
+	<delete id="deleteById" parameterType="int">
+		  delete from t_imei where id = #{id}
+	</delete>
+</mapper>

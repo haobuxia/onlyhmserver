@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.HelmetBindLogDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.HelmetBindLog">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="helmetId" property="helmetId" jdbcType="INTEGER" />
+		<result column="bindTime" property="bindTime" jdbcType="TIMESTAMP" />
+		<result column="userName" property="userName" jdbcType="VARCHAR" />
+		<result column="userPhone" property="userPhone" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, helmetId, bindTime,userName,userPhone
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		helmetId, bindTime,userName,userPhone
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="helmetId!=null and helmetId >= 0 ">
+				and helmetId = #{helmetId}
+			</if>
+			<if test="userPhone!=null and userPhone != '' ">
+				and userPhone = #{userPhone}
+			</if>
+			<if test="bindTime!=null ">
+				and bindTime = #{bindTime}
+			</if>
+			<if test="bindTime1!=null ">
+				and bindTime &gt;= #{bindTime1}
+			</if>
+			<if test="bindTime2!=null ">
+				and bindTime &lt;= #{bindTime2}
+			</if>
+			<if test="bind!=null and bind == 1 ">
+				and userPhone is not null and userPhone != ''
+			</if>
+			<if test="bind!=null and bind == 0 ">
+				and (userPhone is null or userPhone = '')
+			</if>
+		</where>
+	</sql>
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.HelmetBindLog" useGeneratedKeys="true" keyProperty="id">
+		insert into t_helmet_bindlog (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{helmetId},#{bindTime},#{userName},#{userPhone}
+		)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_helmet_bindlog
+		 where id = #{id}
+	</select>
+
+	<select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_helmet_bindlog
+		<include refid="conditions"/>
+		order by bindTime desc
+		<if test="order != null and order &gt; 0">
+			asc
+		</if>
+		<if test="order != null and order &lt; 0">
+			desc
+		</if>
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		select
+		<include refid="Base_Column_List" />
+		from t_helmet_bindlog
+		<include refid="conditions"/>
+	</select>
+
+</mapper>

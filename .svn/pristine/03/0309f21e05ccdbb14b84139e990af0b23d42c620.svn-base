@@ -1,0 +1,1 @@
+ALTER TABLE hmserver.t_helmet CHANGE clientId imei VARCHAR(50);

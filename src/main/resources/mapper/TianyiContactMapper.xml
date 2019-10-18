@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.client.TianyiContactDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.client.TianyiContact">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="contactId" property="contactId" jdbcType="INTEGER"/>
+        <result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id, userId,contactId,addTime,remark
+	</sql>
+
+    <sql id="Base_Column_List_NoId">
+		 userId,contactId,addTime,remark
+	</sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="userId != null and userId != 0 ">
+                and userId = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="contactId != null and contactId != 0 ">
+                and contactId = #{contactId,jdbcType=INTEGER}
+            </if>
+            <if test="addTime != null ">
+                and addTime = #{addTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="addTime1 != null ">
+                and addTime &gt;= #{addTime1,jdbcType=TIMESTAMP}
+            </if>
+            <if test="addTime2 != null ">
+                and addTime &lt;= #{addTime2,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.client.TianyiContact" useGeneratedKeys="true"
+            keyProperty="id">
+        replace into t_tianyi_contact (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{userId},#{contactId},#{addTime},#{remark}
+        )
+    </insert>
+
+    <select id="listBy" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyi_contact
+        <include refid="conditions"/>
+        order by addTime desc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        select count(id)
+        from t_tianyi_contact
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyi_contact
+        where id = #{id}
+    </select>
+
+    <select id="selectByUserId" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyi_contact
+        where userId = #{userId}
+    </select>
+
+    <select id="selectByUserIdContactId" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_tianyi_contact
+        where userId = #{userId} and contactId = #{contactId}
+    </select>
+
+    <delete id="deleteById" parameterType="int">
+		  delete from t_tianyi_contact where id = #{id}
+	</delete>
+
+    <delete id="deleteByUserId" parameterType="int">
+		delete from t_tianyi_contact where userId = #{userId}
+	</delete>
+
+    <delete id="deleteByUserIdContactId" parameterType="map">
+		delete from t_tianyi_contact
+		where userId = #{userId} and contactId = #{contactId}
+	</delete>
+
+</mapper>

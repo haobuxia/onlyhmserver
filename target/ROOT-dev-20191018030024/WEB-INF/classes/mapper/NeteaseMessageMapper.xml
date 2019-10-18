@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.netease.NeteaseMessageDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.netease.NeteaseMessage">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+		<result column="processFlag" property="processFlag" jdbcType="VARCHAR" />
+		<result column="eventType" property="eventType" jdbcType="VARCHAR" />
+		<result column="convType" property="convType" jdbcType="VARCHAR" />
+		<result column="toAccount" property="toAccount" jdbcType="VARCHAR" />
+		<result column="fromAccount" property="fromAccount" jdbcType="VARCHAR" />
+		<result column="msgTimestamp" property="msgTimestamp" jdbcType="VARCHAR" />
+		<result column="msgType" property="msgType" jdbcType="VARCHAR" />
+		<result column="msgIdClient" property="msgIdClient" jdbcType="VARCHAR" />
+		<result column="msgIdServer" property="msgIdServer" jdbcType="VARCHAR" />
+		<result column="failReason" property="failReason" jdbcType="VARCHAR" />
+		<result column="fullMsg" property="fullMsg" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, time,processFlag, eventType,convType,toAccount,fromAccount,msgTimestamp,msgType,msgIdClient,msgIdServer,failReason,fullMsg
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 time,processFlag, eventType,convType,toAccount,fromAccount,msgTimestamp,msgType,msgIdClient,msgIdServer,failReason,fullMsg
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="id != null and id >= 0 ">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="eventType != null and eventType != '' ">
+				and eventType = #{eventType}
+			</if>
+			<if test="eventTypeList != null and eventTypeList.size > 0 ">
+				and eventType in
+				<foreach collection="eventTypeList" item="listItem" open="(" separator="," close=")">
+					#{listItem}
+				</foreach>
+			</if>
+			<if test="convType != null and convType != '' ">
+				and convType = #{convType}
+			</if>
+			<if test="msgType != null and msgType != '' ">
+				and msgType = #{msgType}
+			</if>
+			<if test="time != null">
+				and time = #{time,jdbcType=TIMESTAMP}
+			</if>
+			<if test="time1 != null ">
+				and time &gt;= #{time1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="time2 != null ">
+				and time &lt;= #{time2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="msgTimestamp != null ">
+				and msgTimestamp = #{msgTimestamp,jdbcType=TIMESTAMP}
+			</if>
+			<if test="msgTimestamp1 != null ">
+				and msgTimestamp &gt;= #{msgTimestamp1,jdbcType=VARCHAR}
+			</if>
+			<if test="msgTimestamp2 != null ">
+				and msgTimestamp &lt;= #{msgTimestam2,jdbcType=VARCHAR}
+			</if>
+			<if test="processFlag != null and processFlag != '' ">
+				and processFlag = #{processFlag}
+			</if>
+			<if test="processFlagList != null and processFlagList.size > 0 ">
+				and processFlag in
+				<foreach collection="processFlagList" item="listItem" open="(" separator="," close=")">
+					#{listItem}
+				</foreach>
+			</if>
+			<if test="toAccount != null and toAccount != '' ">
+				and toAccount = #{toAccount}
+			</if>
+			<if test="fromAccount != null and fromAccount != '' ">
+				and fromAccount = #{fromAccount}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.netease.NeteaseMessage" useGeneratedKeys="true" keyProperty="id">
+		insert into t_netease_msg (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{time},#{processFlag},#{eventType},#{convType},#{toAccount},#{fromAccount},#{msgTimestamp},#{msgType},#{msgIdClient},#{msgIdServer},#{failReason},#{fullMsg}
+		)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_netease_msg
+		 where id = #{id}
+	</select>
+
+	<select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_netease_msg
+		<include refid="conditions"/>
+		order by msgTimestamp
+		<include refid="core.page"/>
+	</select>
+	<select id="countBy" parameterType="map" resultType="int">
+		select count(id)
+		from t_netease_msg
+		<include refid="conditions"/>
+	</select>
+
+	<update id="updateMessageProcessFlag" parameterType="map">
+		update t_netease_msg
+		  set processFlag = #{processFlag},
+		  failReason = #{failReason}
+		where id = #{id}
+	</update>
+
+</mapper>

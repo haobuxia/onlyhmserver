@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.HelmetMindWaverDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.HelmetMindWaver">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="neUsername" property="neUsername" jdbcType="VARCHAR" />
+        <result column="concert" property="concert" jdbcType="INTEGER" />
+        <result column="relax" property="relax" jdbcType="INTEGER" />
+        <result column="runtime" property="runtime" jdbcType="BIGINT" />
+        <result column="clientId" property="clientId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,createTime,neUsername,concert,relax,runtime,clientId
+    </sql>
+    <sql id="Base_Column_List_NoId">
+        createTime,neUsername,concert,relax,runtime,clientId
+    </sql>
+    <sql id="conditions">
+        <where>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.HelmetMindWaver" useGeneratedKeys="true" keyProperty="id">
+        insert into t_helmetmindwaver (
+        <include refid="Base_Column_List_NoId" />
+        )
+        values (
+        #{createTime},#{neUsername},#{concert},#{relax},#{runtime},#{clientId}
+        )
+    </insert>
+    <select id="getLatestMindWaver" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_helmetmindwaver
+        where clientId = #{clientId}
+        order by createTime desc limit 1
+    </select>
+
+</mapper>

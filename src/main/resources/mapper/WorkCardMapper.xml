@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tianyi.helmet.server.dao.workorder.WorkCardDao">
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.workorder.WorkCard">
+        <id column="workcard_pk" jdbcType="INTEGER" property="workcardPk"/>
+        <result column="workId" jdbcType="VARCHAR" property="workid"/>
+        <result column="tyCustomerOid" jdbcType="VARCHAR" property="tycustomeroid"/>
+        <result column="customerId" jdbcType="VARCHAR" property="customerid"/>
+        <result column="customerName" jdbcType="VARCHAR" property="customername"/>
+        <result column="customerAddress" jdbcType="VARCHAR" property="customeraddress"/>
+        <result column="workOrderId" jdbcType="VARCHAR" property="workorderid"/>
+        <result column="workOrderLevel" jdbcType="VARCHAR" property="workorderlevel"/>
+        <result column="workOrderFrom" jdbcType="VARCHAR" property="workorderfrom"/>
+        <result column="workOrderStatus" jdbcType="VARCHAR" property="workorderstatus"/>
+        <result column="deviceId" jdbcType="VARCHAR" property="deviceid"/>
+        <result column="deviceModel" jdbcType="VARCHAR" property="devicemodel"/>
+        <result column="deviceType" jdbcType="VARCHAR" property="devicetype"/>
+        <result column="deviceBrand" jdbcType="VARCHAR" property="devicebrand"/>
+        <result column="deviceTon" jdbcType="VARCHAR" property="deviceton"/>
+        <result column="workDescription" jdbcType="VARCHAR" property="workdescription"/>
+        <result column="linkmanName" jdbcType="VARCHAR" property="linkmanname"/>
+        <result column="linkmanPhone" jdbcType="VARCHAR" property="linkmanphone"/>
+        <result column="tyExpertWorkOid" jdbcType="VARCHAR" property="tyexpertworkoid"/>
+        <result column="workPattern" jdbcType="VARCHAR" property="workpattern"/>
+        <result column="workName" jdbcType="VARCHAR" property="workname"/>
+        <result column="personRequire" jdbcType="VARCHAR" property="personrequire"/>
+        <result column="toolRequire" jdbcType="VARCHAR" property="toolrequire"/>
+        <result column="executionTimes" jdbcType="SMALLINT" property="executiontimes"/>
+        <result column="isCustomerWork" jdbcType="BIT" property="iscustomerwork"/>
+        <result column="workStatus" jdbcType="VARCHAR" property="workstatus"/>
+        <result column="workStartTime" jdbcType="INTEGER" property="workstarttime"/>
+        <result column="workFinishTime" jdbcType="INTEGER" property="workfinishtime"/>
+        <result column="isNeedPart" jdbcType="BIT" property="isneedpart"/>
+        <result column="srvPersonId" jdbcType="VARCHAR" property="srvpersonid"/>
+        <result column="srvPersonName" jdbcType="VARCHAR" property="srvpersonname"/>
+        <result column="srvPersonPhone" jdbcType="VARCHAR" property="srvpersonphone"/>
+        <result column="workPlanDate" jdbcType="VARCHAR" property="workplandate"/>
+        <result column="workPlanTime" jdbcType="INTEGER" property="workplantime"/>
+        <result column="devicePosition" jdbcType="VARCHAR" property="deviceposition"/>
+        <result column="deviceGps" jdbcType="VARCHAR" property="devicegps"/>
+        <result column="workHours" jdbcType="INTEGER" property="workhours"/>
+        <result column="deviceOid" jdbcType="VARCHAR" property="deviceoid"/>
+        <result column="workCreateTime" jdbcType="INTEGER" property="workcreatetime"/>
+        <result column="customerHomeAddress" jdbcType="VARCHAR" property="customerhomeaddress"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    workcard_pk, workId, tyCustomerOid, customerId, customerName, customerAddress, workOrderId, 
+    workOrderLevel, workOrderFrom, workOrderStatus, deviceId, deviceModel, deviceType, 
+    deviceBrand, deviceTon, workDescription, linkmanName, linkmanPhone, tyExpertWorkOid, 
+    workPattern, workName, personRequire, toolRequire, executionTimes, isCustomerWork, 
+    workStatus, workStartTime, workFinishTime, isNeedPart, srvPersonId, srvPersonName, 
+    srvPersonPhone, workPlanDate, workPlanTime, devicePosition, deviceGps, workHours, 
+    deviceOid, workCreateTime, customerHomeAddress
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workcard
+        where workcard_pk = #{workcardPk,jdbcType=INTEGER}
+    </select>
+    <select id="selectByWorkCardId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workcard
+        where workid= #{workId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_workcard
+    where workcard_pk = #{workcardPk,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insertSelective" parameterType="com.tianyi.helmet.server.entity.workorder.WorkCard">
+        insert into t_workcard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workcardPk != null">
+                workcard_pk,
+            </if>
+            <if test="workid != null">
+                workId,
+            </if>
+            <if test="tycustomeroid != null">
+                tyCustomerOid,
+            </if>
+            <if test="customerid != null">
+                customerId,
+            </if>
+            <if test="customername != null">
+                customerName,
+            </if>
+            <if test="customeraddress != null">
+                customerAddress,
+            </if>
+            <if test="workorderid != null">
+                workOrderId,
+            </if>
+            <if test="workorderlevel != null">
+                workOrderLevel,
+            </if>
+            <if test="workorderfrom != null">
+                workOrderFrom,
+            </if>
+            <if test="workorderstatus != null">
+                workOrderStatus,
+            </if>
+            <if test="deviceid != null">
+                deviceId,
+            </if>
+            <if test="devicemodel != null">
+                deviceModel,
+            </if>
+            <if test="devicetype != null">
+                deviceType,
+            </if>
+            <if test="devicebrand != null">
+                deviceBrand,
+            </if>
+            <if test="deviceton != null">
+                deviceTon,
+            </if>
+            <if test="workdescription != null">
+                workDescription,
+            </if>
+            <if test="linkmanname != null">
+                linkmanName,
+            </if>
+            <if test="linkmanphone != null">
+                linkmanPhone,
+            </if>
+            <if test="tyexpertworkoid != null">
+                tyExpertWorkOid,
+            </if>
+            <if test="workpattern != null">
+                workPattern,
+            </if>
+            <if test="workname != null">
+                workName,
+            </if>
+            <if test="personrequire != null">
+                personRequire,
+            </if>
+            <if test="toolrequire != null">
+                toolRequire,
+            </if>
+            <if test="executiontimes != null">
+                executionTimes,
+            </if>
+            <if test="iscustomerwork != null">
+                isCustomerWork,
+            </if>
+            <if test="workstatus != null">
+                workStatus,
+            </if>
+            <if test="workstarttime != null">
+                workStartTime,
+            </if>
+            <if test="workfinishtime != null">
+                workFinishTime,
+            </if>
+            <if test="isneedpart != null">
+                isNeedPart,
+            </if>
+            <if test="srvpersonid != null">
+                srvPersonId,
+            </if>
+            <if test="srvpersonname != null">
+                srvPersonName,
+            </if>
+            <if test="srvpersonphone != null">
+                srvPersonPhone,
+            </if>
+            <if test="workplandate != null">
+                workPlanDate,
+            </if>
+            <if test="workplantime != null">
+                workPlanTime,
+            </if>
+            <if test="deviceposition != null">
+                devicePosition,
+            </if>
+            <if test="devicegps != null">
+                deviceGps,
+            </if>
+            <if test="workhours != null">
+                workHours,
+            </if>
+            <if test="deviceoid != null">
+                deviceOid,
+            </if>
+            <if test="workcreatetime != null">
+                workCreateTime,
+            </if>
+            <if test="customerhomeaddress != null">
+                customerHomeAddress,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workcardPk != null">
+                #{workcardPk,jdbcType=INTEGER},
+            </if>
+            <if test="workid != null">
+                #{workid,jdbcType=VARCHAR},
+            </if>
+            <if test="tycustomeroid != null">
+                #{tycustomeroid,jdbcType=VARCHAR},
+            </if>
+            <if test="customerid != null">
+                #{customerid,jdbcType=VARCHAR},
+            </if>
+            <if test="customername != null">
+                #{customername,jdbcType=VARCHAR},
+            </if>
+            <if test="customeraddress != null">
+                #{customeraddress,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderid != null">
+                #{workorderid,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderlevel != null">
+                #{workorderlevel,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderfrom != null">
+                #{workorderfrom,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderstatus != null">
+                #{workorderstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceid != null">
+                #{deviceid,jdbcType=VARCHAR},
+            </if>
+            <if test="devicemodel != null">
+                #{devicemodel,jdbcType=VARCHAR},
+            </if>
+            <if test="devicetype != null">
+                #{devicetype,jdbcType=VARCHAR},
+            </if>
+            <if test="devicebrand != null">
+                #{devicebrand,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceton != null">
+                #{deviceton,jdbcType=VARCHAR},
+            </if>
+            <if test="workdescription != null">
+                #{workdescription,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanname != null">
+                #{linkmanname,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanphone != null">
+                #{linkmanphone,jdbcType=VARCHAR},
+            </if>
+            <if test="tyexpertworkoid != null">
+                #{tyexpertworkoid,jdbcType=VARCHAR},
+            </if>
+            <if test="workpattern != null">
+                #{workpattern,jdbcType=VARCHAR},
+            </if>
+            <if test="workname != null">
+                #{workname,jdbcType=VARCHAR},
+            </if>
+            <if test="personrequire != null">
+                #{personrequire,jdbcType=VARCHAR},
+            </if>
+            <if test="toolrequire != null">
+                #{toolrequire,jdbcType=VARCHAR},
+            </if>
+            <if test="executiontimes != null">
+                #{executiontimes,jdbcType=SMALLINT},
+            </if>
+            <if test="iscustomerwork != null">
+                #{iscustomerwork,jdbcType=BIT},
+            </if>
+            <if test="workstatus != null">
+                #{workstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="workstarttime != null">
+                #{workstarttime,jdbcType=INTEGER},
+            </if>
+            <if test="workfinishtime != null">
+                #{workfinishtime,jdbcType=INTEGER},
+            </if>
+            <if test="isneedpart != null">
+                #{isneedpart,jdbcType=BIT},
+            </if>
+            <if test="srvpersonid != null">
+                #{srvpersonid,jdbcType=VARCHAR},
+            </if>
+            <if test="srvpersonname != null">
+                #{srvpersonname,jdbcType=VARCHAR},
+            </if>
+            <if test="srvpersonphone != null">
+                #{srvpersonphone,jdbcType=VARCHAR},
+            </if>
+            <if test="workplandate != null">
+                #{workplandate,jdbcType=VARCHAR},
+            </if>
+            <if test="workplantime != null">
+                #{workplantime,jdbcType=INTEGER},
+            </if>
+            <if test="deviceposition != null">
+                #{deviceposition,jdbcType=VARCHAR},
+            </if>
+            <if test="devicegps != null">
+                #{devicegps,jdbcType=VARCHAR},
+            </if>
+            <if test="workhours != null">
+                #{workhours,jdbcType=INTEGER},
+            </if>
+            <if test="deviceoid != null">
+                #{deviceoid,jdbcType=VARCHAR},
+            </if>
+            <if test="workcreatetime != null">
+                #{workcreatetime,jdbcType=INTEGER},
+            </if>
+            <if test="customerhomeaddress != null">
+                #{customerhomeaddress,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.tianyi.helmet.server.entity.workorder.WorkCard">
+        update t_workcard
+        <set>
+            <if test="workid != null">
+                workId = #{workid,jdbcType=VARCHAR},
+            </if>
+            <if test="tycustomeroid != null">
+                tyCustomerOid = #{tycustomeroid,jdbcType=VARCHAR},
+            </if>
+            <if test="customerid != null">
+                customerId = #{customerid,jdbcType=VARCHAR},
+            </if>
+            <if test="customername != null">
+                customerName = #{customername,jdbcType=VARCHAR},
+            </if>
+            <if test="customeraddress != null">
+                customerAddress = #{customeraddress,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderid != null">
+                workOrderId = #{workorderid,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderlevel != null">
+                workOrderLevel = #{workorderlevel,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderfrom != null">
+                workOrderFrom = #{workorderfrom,jdbcType=VARCHAR},
+            </if>
+            <if test="workorderstatus != null">
+                workOrderStatus = #{workorderstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceid != null">
+                deviceId = #{deviceid,jdbcType=VARCHAR},
+            </if>
+            <if test="devicemodel != null">
+                deviceModel = #{devicemodel,jdbcType=VARCHAR},
+            </if>
+            <if test="devicetype != null">
+                deviceType = #{devicetype,jdbcType=VARCHAR},
+            </if>
+            <if test="devicebrand != null">
+                deviceBrand = #{devicebrand,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceton != null">
+                deviceTon = #{deviceton,jdbcType=VARCHAR},
+            </if>
+            <if test="workdescription != null">
+                workDescription = #{workdescription,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanname != null">
+                linkmanName = #{linkmanname,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanphone != null">
+                linkmanPhone = #{linkmanphone,jdbcType=VARCHAR},
+            </if>
+            <if test="tyexpertworkoid != null">
+                tyExpertWorkOid = #{tyexpertworkoid,jdbcType=VARCHAR},
+            </if>
+            <if test="workpattern != null">
+                workPattern = #{workpattern,jdbcType=VARCHAR},
+            </if>
+            <if test="workname != null">
+                workName = #{workname,jdbcType=VARCHAR},
+            </if>
+            <if test="personrequire != null">
+                personRequire = #{personrequire,jdbcType=VARCHAR},
+            </if>
+            <if test="toolrequire != null">
+                toolRequire = #{toolrequire,jdbcType=VARCHAR},
+            </if>
+            <if test="executiontimes != null">
+                executionTimes = #{executiontimes,jdbcType=SMALLINT},
+            </if>
+            <if test="iscustomerwork != null">
+                isCustomerWork = #{iscustomerwork,jdbcType=BIT},
+            </if>
+            <if test="workstatus != null">
+                workStatus = #{workstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="workstarttime != null">
+                workStartTime = #{workstarttime,jdbcType=INTEGER},
+            </if>
+            <if test="workfinishtime != null">
+                workFinishTime = #{workfinishtime,jdbcType=INTEGER},
+            </if>
+            <if test="isneedpart != null">
+                isNeedPart = #{isneedpart,jdbcType=BIT},
+            </if>
+            <if test="srvpersonid != null">
+                srvPersonId = #{srvpersonid,jdbcType=VARCHAR},
+            </if>
+            <if test="srvpersonname != null">
+                srvPersonName = #{srvpersonname,jdbcType=VARCHAR},
+            </if>
+            <if test="srvpersonphone != null">
+                srvPersonPhone = #{srvpersonphone,jdbcType=VARCHAR},
+            </if>
+            <if test="workplandate != null">
+                workPlanDate = #{workplandate,jdbcType=VARCHAR},
+            </if>
+            <if test="workplantime != null">
+                workPlanTime = #{workplantime,jdbcType=INTEGER},
+            </if>
+            <if test="deviceposition != null">
+                devicePosition = #{deviceposition,jdbcType=VARCHAR},
+            </if>
+            <if test="devicegps != null">
+                deviceGps = #{devicegps,jdbcType=VARCHAR},
+            </if>
+            <if test="workhours != null">
+                workHours = #{workhours,jdbcType=INTEGER},
+            </if>
+            <if test="deviceoid != null">
+                deviceOid = #{deviceoid,jdbcType=VARCHAR},
+            </if>
+            <if test="workcreatetime != null">
+                workCreateTime = #{workcreatetime,jdbcType=INTEGER},
+            </if>
+            <if test="customerhomeaddress != null">
+                customerHomeAddress = #{customerhomeaddress,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where workcard_pk = #{workcardPk,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.tianyi.helmet.server.entity.workorder.WorkCard">
+    update t_workcard
+    set workId = #{workid,jdbcType=VARCHAR},
+      tyCustomerOid = #{tycustomeroid,jdbcType=VARCHAR},
+      customerId = #{customerid,jdbcType=VARCHAR},
+      customerName = #{customername,jdbcType=VARCHAR},
+      customerAddress = #{customeraddress,jdbcType=VARCHAR},
+      workOrderId = #{workorderid,jdbcType=VARCHAR},
+      workOrderLevel = #{workorderlevel,jdbcType=VARCHAR},
+      workOrderFrom = #{workorderfrom,jdbcType=VARCHAR},
+      workOrderStatus = #{workorderstatus,jdbcType=VARCHAR},
+      deviceId = #{deviceid,jdbcType=VARCHAR},
+      deviceModel = #{devicemodel,jdbcType=VARCHAR},
+      deviceType = #{devicetype,jdbcType=VARCHAR},
+      deviceBrand = #{devicebrand,jdbcType=VARCHAR},
+      deviceTon = #{deviceton,jdbcType=VARCHAR},
+      workDescription = #{workdescription,jdbcType=VARCHAR},
+      linkmanName = #{linkmanname,jdbcType=VARCHAR},
+      linkmanPhone = #{linkmanphone,jdbcType=VARCHAR},
+      tyExpertWorkOid = #{tyexpertworkoid,jdbcType=VARCHAR},
+      workPattern = #{workpattern,jdbcType=VARCHAR},
+      workName = #{workname,jdbcType=VARCHAR},
+      personRequire = #{personrequire,jdbcType=VARCHAR},
+      toolRequire = #{toolrequire,jdbcType=VARCHAR},
+      executionTimes = #{executiontimes,jdbcType=SMALLINT},
+      isCustomerWork = #{iscustomerwork,jdbcType=BIT},
+      workStatus = #{workstatus,jdbcType=VARCHAR},
+      workStartTime = #{workstarttime,jdbcType=INTEGER},
+      workFinishTime = #{workfinishtime,jdbcType=INTEGER},
+      isNeedPart = #{isneedpart,jdbcType=BIT},
+      srvPersonId = #{srvpersonid,jdbcType=VARCHAR},
+      srvPersonName = #{srvpersonname,jdbcType=VARCHAR},
+      srvPersonPhone = #{srvpersonphone,jdbcType=VARCHAR},
+      workPlanDate = #{workplandate,jdbcType=VARCHAR},
+      workPlanTime = #{workplantime,jdbcType=INTEGER},
+      devicePosition = #{deviceposition,jdbcType=VARCHAR},
+      deviceGps = #{devicegps,jdbcType=VARCHAR},
+      workHours = #{workhours,jdbcType=INTEGER},
+      deviceOid = #{deviceoid,jdbcType=VARCHAR},
+      workCreateTime = #{workcreatetime,jdbcType=INTEGER},
+      customerHomeAddress = #{customerhomeaddress,jdbcType=VARCHAR}
+    where workcard_pk = #{workcardPk,jdbcType=INTEGER}
+  </update>
+
+    <select id="listBy" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_workcard
+        <include refid="conditions"/>
+    </select>
+
+    <sql id="conditions">
+        <where>
+            <if test="workid != null">
+                and workId = #{workid,jdbcType=VARCHAR}
+            </if>
+            <if test="tycustomeroid != null">
+                and tyCustomerOid = #{tycustomeroid,jdbcType=VARCHAR}
+            </if>
+            <if test="customerid != null">
+                and customerId = #{customerid,jdbcType=VARCHAR}
+            </if>
+            <if test="customername != null">
+                and customerName = #{customername,jdbcType=VARCHAR}
+            </if>
+            <if test="customeraddress != null">
+                and customerAddress = #{customeraddress,jdbcType=VARCHAR}
+            </if>
+            <if test="workorderid != null">
+                and workOrderId = #{workorderid,jdbcType=VARCHAR}
+            </if>
+            <if test="workorderlevel != null">
+                and workOrderLevel = #{workorderlevel,jdbcType=VARCHAR}
+            </if>
+            <if test="workorderfrom != null">
+                and workOrderFrom = #{workorderfrom,jdbcType=VARCHAR}
+            </if>
+            <if test="workorderstatus != null">
+                and workOrderStatus = #{workorderstatus,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceid != null">
+                and deviceId = #{deviceid,jdbcType=VARCHAR}
+            </if>
+            <if test="devicemodel != null">
+                and deviceModel = #{devicemodel,jdbcType=VARCHAR}
+            </if>
+            <if test="devicetype != null">
+                and deviceType = #{devicetype,jdbcType=VARCHAR}
+            </if>
+            <if test="devicebrand != null">
+                and deviceBrand = #{devicebrand,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceton != null">
+                and deviceTon = #{deviceton,jdbcType=VARCHAR}
+            </if>
+            <if test="workdescription != null">
+                and workDescription = #{workdescription,jdbcType=VARCHAR}
+            </if>
+            <if test="linkmanname != null">
+                and linkmanName = #{linkmanname,jdbcType=VARCHAR}
+            </if>
+            <if test="linkmanphone != null">
+                and linkmanPhone = #{linkmanphone,jdbcType=VARCHAR}
+            </if>
+            <if test="tyexpertworkoid != null">
+                and tyExpertWorkOid = #{tyexpertworkoid,jdbcType=VARCHAR}
+            </if>
+            <if test="workpattern != null">
+                and workPattern = #{workpattern,jdbcType=VARCHAR}
+            </if>
+            <if test="workname != null">
+                and workName = #{workname,jdbcType=VARCHAR}
+            </if>
+            <if test="personrequire != null">
+                and personRequire = #{personrequire,jdbcType=VARCHAR}
+            </if>
+            <if test="toolrequire != null">
+                and toolRequire = #{toolrequire,jdbcType=VARCHAR}
+            </if>
+            <if test="executiontimes != null">
+                and executionTimes = #{executiontimes,jdbcType=SMALLINT}
+            </if>
+            <if test="iscustomerwork != null">
+                and isCustomerWork = #{iscustomerwork,jdbcType=BIT}
+            </if>
+            <if test="workstatus != null">
+                and workStatus = #{workstatus,jdbcType=VARCHAR}
+            </if>
+            <if test="workstatusin != null">
+                and workStatus in
+                <foreach collection="workstatusin" item="state" separator="," close=")" open="(">
+                    #{state}
+                </foreach>
+            </if>
+            <if test="workstarttime != null">
+                and workStartTime &gt; #{workstarttime,jdbcType=INTEGER}
+            </if>
+            <if test="workfinishtime != null">
+                and workFinishTime &lt; #{workfinishtime,jdbcType=INTEGER}
+            </if>
+            <if test="isneedpart != null">
+                and isNeedPart = #{isneedpart,jdbcType=BIT}
+            </if>
+            <if test="srvpersonid != null">
+                and srvPersonId = #{srvpersonid,jdbcType=VARCHAR}
+            </if>
+            <if test="srvpersonname != null">
+                and srvPersonName = #{srvpersonname,jdbcType=VARCHAR}
+            </if>
+            <if test="srvpersonphone != null">
+                and srvPersonPhone = #{srvpersonphone,jdbcType=VARCHAR}
+            </if>
+            <if test="workplandate != null">
+                and workPlanDate = #{workplandate,jdbcType=VARCHAR}
+            </if>
+            <if test="workplantime != null">
+                and workPlanTime = #{workplantime,jdbcType=INTEGER}
+            </if>
+            <if test="deviceposition != null">
+                and devicePosition = #{deviceposition,jdbcType=VARCHAR}
+            </if>
+            <if test="devicegps != null">
+                and deviceGps = #{devicegps,jdbcType=VARCHAR}
+            </if>
+            <if test="workhours != null">
+                and workHours = #{workhours,jdbcType=INTEGER}
+            </if>
+            <if test="deviceoid != null">
+                and deviceOid = #{deviceoid,jdbcType=VARCHAR}
+            </if>
+            <if test="workcreatetime != null">
+                and workCreateTime = #{workcreatetime,jdbcType=INTEGER}
+            </if>
+            <if test="customerhomeaddress != null">
+                and customerHomeAddress = #{customerhomeaddress,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+</mapper>

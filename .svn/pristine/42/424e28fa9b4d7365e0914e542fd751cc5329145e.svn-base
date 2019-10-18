@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.file.TagGroupDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.file.TagGroup">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="groupName" property="groupName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, createTime,groupName
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 createTime,groupName
+	</sql>
+
+	<sql id="conditions">
+		<where>
+			<if test="groupName != null and groupName != ''">
+				and groupName = #{groupName}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and groupName like concat(#{keyword},'%')
+			</if>
+			<if test="groupNameNotStart != null and groupNameNotStart != ''">
+				and groupName not like concat(#{groupNameNotStart},'%')
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				and groupName like concat('%',#{keyword},'%')
+			</if>
+			<if test="idList != null and idList.size > 0  ">
+				and id IN
+				<foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.file.Tag" useGeneratedKeys="true" keyProperty="id">
+		insert ignore into t_tag_group (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{createTime},#{groupName}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_tag_group
+		<include refid="conditions"/>
+		order by createTime desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_tag_group
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_tag_group
+		 where id = #{id}
+	</select>
+
+	<update id="updateById" parameterType="com.tianyi.helmet.server.entity.file.Tag">
+		update t_tag_group
+		  set groupName = #{groupName},
+			  groupId = #{groupId}
+		where id = #{id}
+	</update>
+
+	<update id="updateNameById" parameterType="map">
+		update t_tag_group
+		set groupName = #{groupName}
+		where id = #{id}
+	</update>
+
+	<delete id="deleteById" parameterType="int">
+		delete from t_tag_group where id = #{id}
+	</delete>
+
+</mapper>

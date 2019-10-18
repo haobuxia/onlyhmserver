@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.log.UserLogDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.log.UserLog">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="userId" property="userId" jdbcType="INTEGER" />
+		<result column="userType" property="userType" jdbcType="VARCHAR" />
+		<result column="logType" property="logType" jdbcType="VARCHAR" />
+		<result column="logContent" property="logContent" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, createTime,userId,userType,logType,logContent
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 createTime,userId,userType,logType,logContent
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="logType != null and logType != ''">
+				and logType = #{logType}
+			</if>
+			<if test="userId != null ">
+				and userId = #{userId}
+			</if>
+			<if test="userType != null and userType != ''">
+				and userType = #{userType}
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="logContentlike != null and logContentlike != '' ">
+				and logContent like concat('%',#{logContentlike},'%')
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.log.UserLog" useGeneratedKeys="true" keyProperty="id">
+		insert into t_user_log (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{createTime},#{userId},#{userType},#{logType},#{logContent}
+		)
+	</insert>
+
+	<select id="listBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_log
+		<include refid="conditions"/>
+		order by createTime desc
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		 select count(id)
+		 from t_user_log
+		<include refid="conditions"/>
+	</select>
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_user_log
+		 where id = #{id}
+	</select>
+
+</mapper>

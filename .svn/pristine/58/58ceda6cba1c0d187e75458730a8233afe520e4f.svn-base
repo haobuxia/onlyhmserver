@@ -1,0 +1,7 @@
+mqtt.jobstart=1
+mqtt.protocal = tcp://
+mqtt.server = 222.223.231.137
+mqtt.port = 1883
+mqtt.user =
+mqtt.password =
+mqtt.backend.clientId = SYSTEM_BACKEND

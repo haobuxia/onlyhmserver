@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.svc.SvcFaultBriefDao">
+
+    <resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.svc.SvcFaultBrief">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="rwh" property="rwh" jdbcType="VARCHAR"/>
+        <result column="oprtId" property="oprtId" jdbcType="VARCHAR"/>
+        <result column="siteVideo" property="siteVideo" jdbcType="VARCHAR"/>
+        <result column="diggerVideo" property="diggerVideo" jdbcType="VARCHAR"/>
+        <result column="faultCheckVideo" property="faultCheckVideo" jdbcType="VARCHAR"/>
+        <result column="faultRepairVideo" property="faultRepairVideo" jdbcType="VARCHAR"/>
+        <result column="jhPic" property="jhPic" jdbcType="VARCHAR"/>
+        <result column="timeMile" property="timeMile" jdbcType="VARCHAR"/>
+        <result column="usageStat" property="usageStat" jdbcType="VARCHAR"/>
+        <result column="fault" property="fault" jdbcType="VARCHAR"/>
+        <result column="faultResove" property="faultResove" jdbcType="VARCHAR"/>
+        <result column="faultHandle" property="faultHandle" jdbcType="VARCHAR"/>
+        <result column="faultRepair" property="faultRepair" jdbcType="VARCHAR"/>
+        <result column="opinion" property="opinion" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id, rwh, oprtId, siteVideo, diggerVideo, faultCheckVideo, faultRepairVideo, jhPic, timeMile,usageStat,fault,faultResove,faultHandle,faultRepair,opinion
+	</sql>
+    <sql id="Base_Column_List_NoId">
+		 rwh, oprtId, siteVideo, diggerVideo, faultCheckVideo, faultRepairVideo, jhPic, timeMile,usageStat,fault,faultResove,faultHandle,faultRepair,opinion
+	</sql>
+    <sql id="conditions">
+        <where>
+            <if test="rwh != null and rwh != '' ">
+                and rwh = #{rwh,jdbcType=VARCHAR}
+            </if>
+            <if test="oprtId != null and oprtId != '' ">
+                and oprtId = #{oprtId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.tianyi.helmet.server.entity.svc.SvcFaultBrief" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_svc_fault_brief (
+        <include refid="Base_Column_List_NoId"/>
+        )
+        values (
+        #{rwh},#{oprtId},#{siteVideo},#{diggerVideo},#{faultCheckVideo},#{faultRepairVideo},#{jhPic},#{timeMile},#{usageStat},#{fault},#{faultResove},#{faultHandle},#{faultRepair},#{opinion}
+        )
+    </insert>
+
+    <select id="listBy" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_svc_fault_brief
+        <include refid="conditions"/>
+        order by rwh desc,oprtId asc
+        <include refid="core.page"/>
+    </select>
+
+    <select id="countBy" parameterType="map" resultType="int">
+        select count(id)
+        from t_svc_fault_brief
+        <include refid="conditions"/>
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_svc_fault_brief
+        where id = #{id}
+    </select>
+
+    <update id="updateByRwhOprtId" parameterType="com.tianyi.helmet.server.entity.svc.SvcFaultBrief">
+        update t_svc_fault_brief
+        <set>
+            <if test="siteVideo != null and siteVideo != ''">
+                siteVideo = #{siteVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="diggerVideo != null and diggerVideo != ''">
+                diggerVideo = #{diggerVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="faultCheckVideo != null and faultCheckVideo != ''">
+                faultCheckVideo = #{faultCheckVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="faultRepairVideo != null and faultRepairVideo != ''">
+                faultRepairVideo = #{faultRepairVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="jhPic != null and jhPic != ''">
+                jhPic = #{jhPic,jdbcType=VARCHAR},
+            </if>
+            <if test="timeMile != null and timeMile != ''">
+                timeMile = #{timeMile,jdbcType=VARCHAR},
+            </if>
+            <if test="usageStat != null and usageStat != ''">
+                usageStat = #{usageStat,jdbcType=VARCHAR},
+            </if>
+            <if test="fault != null and fault != ''">
+                fault = #{fault,jdbcType=VARCHAR},
+            </if>
+            <if test="faultResove != null and faultResove != ''">
+                faultResove = #{faultResove,jdbcType=VARCHAR},
+            </if>
+            <if test="faultHandle != null and faultHandle != ''">
+                faultHandle = #{faultHandle,jdbcType=VARCHAR},
+            </if>
+            <if test="faultRepair != null and faultRepair != ''">
+                faultRepair = #{faultRepair,jdbcType=VARCHAR},
+            </if>
+            <if test="opinion != null and opinion != ''">
+                opinion = #{opinion,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where rwh = #{rwh} and oprtId = #{oprtId}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+		  delete from t_svc_fault_brief where id = #{id}
+	</delete>
+</mapper>

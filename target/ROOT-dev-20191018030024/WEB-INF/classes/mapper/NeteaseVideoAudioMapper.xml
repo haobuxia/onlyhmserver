@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.netease.NeteaseVideoAudioDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.netease.NeteaseVideoAudio">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="createTime" property="createTime" jdbcType="BIGINT" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="channelId" property="channelId" jdbcType="BIGINT" />
+		<result column="accid1" property="accid1" jdbcType="VARCHAR" />
+		<result column="accid2" property="accid2" jdbcType="VARCHAR" />
+		<result column="caller" property="caller" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, createTime,type, channelId,accid1,accid2,caller,duration
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		 createTime,type, channelId,accid1,accid2,caller,duration
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="id != null and id >= 0 ">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="type != null and type != '' ">
+				and type = #{type}
+			</if>
+			<if test="channelId != null and channelId >0 ">
+				and channelId = #{channelId}
+			</if>
+			<if test="accid1 != null and accid1 != '' ">
+				and accid1 = #{accid1}
+			</if>
+			<if test="accid2 != null and accid2 != '' ">
+				and accid2 = #{accid2}
+			</if>
+			<if test="caller != null and caller != '' ">
+				and caller = #{caller}
+			</if>
+			<if test="duration != null">
+				and duration = #{duration,jdbcType=TIMESTAMP}
+			</if>
+			<if test="duration1 != null ">
+				and duration &gt;= #{duration1,jdbcType=TIMESTAMP}
+			</if>
+			<if test="duration2 != null ">
+				and duration &lt;= #{duration2,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.netease.NeteaseMessage" useGeneratedKeys="true" keyProperty="id">
+		insert into t_netease_videoaudio (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{createTime},#{type},#{channelId},#{accid1},#{accid2},#{caller},#{duration}
+		)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_netease_videoaudio
+		 where id = #{id}
+	</select>
+
+	<select id="selectByChannelId" parameterType="long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_netease_videoaudio
+		where channelId = #{channelId}
+	</select>
+
+	<select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_netease_videoaudio
+		<include refid="conditions"/>
+		order by msgTimestamp
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		select count(id)
+		from t_netease_videoaudio
+		<include refid="conditions"/>
+	</select>
+
+</mapper>

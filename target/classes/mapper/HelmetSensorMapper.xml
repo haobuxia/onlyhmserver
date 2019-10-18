@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianyi.helmet.server.dao.data.HelmetSensorDao">
+
+	<resultMap id="BaseResultMap" type="com.tianyi.helmet.server.entity.data.HelmetSensor">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="clientId" property="clientId" jdbcType="INTEGER" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="concert" property="concert" jdbcType="INTEGER" />
+		<result column="relax" property="relax" jdbcType="INTEGER" />
+		<result column="xa" property="xa" jdbcType="FLOAT" />
+		<result column="ya" property="ya" jdbcType="FLOAT" />
+		<result column="za" property="za" jdbcType="FLOAT" />
+		<result column="xg" property="xg" jdbcType="FLOAT" />
+		<result column="yg" property="yg" jdbcType="FLOAT" />
+		<result column="zg" property="zg" jdbcType="FLOAT" />
+		<result column="batty" property="battery" jdbcType="INTEGER" />
+		<result column="runtime" property="runtime" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, clientId, createTime,concert,relax,xa,ya,za,xg,yg,zg,batty,runtime
+	</sql>
+	<sql id="Base_Column_List_NoId">
+		clientId, createTime,concert,relax,xa,ya,za,xg,yg,zg,batty,runtime
+	</sql>
+	<sql id="conditions">
+		<where>
+			<if test="id != null ">
+				and id = #{id}
+			</if>
+			<if test="clientId != null and clientId != ''">
+				and clientId = #{clientId}
+			</if>
+			<if test="createTime != null ">
+				and createTime = #{createTime}
+			</if>
+			<if test="createTime1 != null ">
+				and createTime &gt;= #{createTime1}
+			</if>
+			<if test="createTime2 != null ">
+				and createTime &lt;= #{createTime2}
+			</if>
+		</where>
+	</sql>
+	<insert id="insert" parameterType="com.tianyi.helmet.server.entity.data.HelmetSensor" useGeneratedKeys="true" keyProperty="id">
+		insert into t_helmetsensor (
+			<include refid="Base_Column_List_NoId" />
+		)
+		values (
+			#{clientId},#{createTime},#{concert},#{relax},#{xa},#{ya},#{za},#{xg},#{yg},#{zg},#{battery},#{runtime}
+		)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List" />
+		from t_helmetsensor
+		 where id = #{id}
+	</select>
+
+	<select id="selectBy" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_helmetsensor
+		<include refid="conditions"/>
+		order by createTime
+		<if test="order != null and order &gt; 0">
+			asc
+		</if>
+		<if test="order != null and order &lt; 0">
+			desc
+		</if>
+		<include refid="core.page"/>
+	</select>
+
+	<select id="countBy" parameterType="map" resultType="int">
+		select count(1)
+		 from  t_helmetsensor
+		<include refid="conditions"/>
+	</select>
+
+	<select id="selectMinCreateTime" parameterType="string" resultType="string">
+		select min(createTime)
+		 from t_helmetsensor
+		 where clientId = #{clientId}
+	</select>
+
+	<select id="selectMaxCreateTime" parameterType="string" resultType="string">
+		select max(createTime)
+		from t_helmetsensor
+		where clientId = #{clientId}
+	</select>
+</mapper>

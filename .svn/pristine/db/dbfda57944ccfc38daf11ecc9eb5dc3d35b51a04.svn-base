@@ -1,0 +1,12 @@
+package com.tianyi.helmet.server.dao.file;
+
+import com.tianyi.helmet.server.entity.file.VideoLocation;
+import org.springframework.stereotype.Repository;
+
+/**
+ * 视频信息扩展-地理位置信息
+ */
+@Repository
+public interface VideoLocationDao {
+    int insert(VideoLocation videoLocation);
+}

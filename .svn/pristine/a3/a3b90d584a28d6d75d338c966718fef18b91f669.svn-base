@@ -1,0 +1,26 @@
+log4j.rootLogger=DEBUG,stdout,R
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.EnhancedPatternLayout
+log4j.appender.stdout.layout.ConversionPattern=[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS}:%c:%L#%M() %m%n
+
+log4j.appender.R=org.apache.log4j.DailyRollingFileAppender   
+log4j.appender.R.File=D:\\workplace\\tianyi\\backend\\hm-server\\doc\\logs\\hmserver.log
+log4j.appender.R.layout=org.apache.log4j.EnhancedPatternLayout   
+log4j.appender.R.layout.ConversionPattern=[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} [%t]:%c:%L#%M() %m%n
+
+log4j.logger.org.apache=ERROR
+log4j.logger.org.springframework=ERROR
+log4j.logger.org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping=ERROR
+log4j.logger.org.mybatis=ERROR
+log4j.logger.org.quartz=ERROR
+log4j.logger.io.netty=WARN
+log4j.logger.com.datastax.driver=WARN
+
+log4j.logger.com.tianyi=DEBUG
+log4j.logger.com.tianyi.helmet.server.dao=DEBUG
+log4j.logger.com.alipay.demo=ERROR
+log4j.logger.com.iflytek.msp.cpdb.lfasr=ERROR
+log4j.logger.com.tianyi.svc.sdk=INFO
+log4j.logger.com.tianyi.helmet.server.service.tianyuan.TianYuanApiBasicHelper=DEBUG
